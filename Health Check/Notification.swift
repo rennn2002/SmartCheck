@@ -14,8 +14,9 @@ class Notification {
     
     func makeNotificationOnSchedule() {
         let isNotificationOn: Bool = UserDefaults.standard.value(forKey: "isNotificationOn") as? Bool ?? true
+        let isFormPost: Bool = UserDefaults.standard.value(forKey: "isFormPosted") as? Bool ?? false
         
-        if isNotificationOn {
+        if isNotificationOn  && !isFormPost {
             var notificationTime = DateComponents()
             var trigger: UNNotificationTrigger
             
@@ -35,17 +36,18 @@ class Notification {
     
     func makeNotificationOnDemand() {
         let isNotificationOn: Bool = UserDefaults.standard.value(forKey: "isNotificationOn") as? Bool ?? true
+        let isFormPost: Bool = UserDefaults.standard.value(forKey: "isFormPost") as? Bool ?? false
         
-        if isNotificationOn {
+        if isNotificationOn && !isFormPost {
             var trigger: UNNotificationTrigger
-        
+            
             trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
             let content = UNMutableNotificationContent()
             
             content.title = "Health Check"
             content.body = "健康観察フォームを提出してください"
             content.sound = UNNotificationSound.default
-
+            
             let request = UNNotificationRequest(identifier: "notification002", content: content, trigger: trigger)
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
         }
