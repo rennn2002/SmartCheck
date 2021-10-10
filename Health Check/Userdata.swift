@@ -16,6 +16,7 @@ struct UserData: Hashable {
     var uid: String
     var schoolid: Int
     var studentid:Int
+    var grade: Int
     var nomalbodytemp: Float
 }
 
