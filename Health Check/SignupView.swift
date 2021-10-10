@@ -37,7 +37,7 @@ struct SignupView: View {
                     TextField("メールアドレス", text: self.$mail)
                     .autocapitalization(.none)
                     .padding()
-                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.mail != "" ? Color.green : Color.gray ,lineWidth: 2))
+                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.mail != "" ? Color(red: 119/255, green: 140/255, blue: 236/255) : Color.gray ,lineWidth: 2))
                         .padding(.top, 25)
                 }
                 Spacer(minLength: 20)
@@ -72,7 +72,7 @@ struct SignupView: View {
                         }
                     }
                     .padding()
-                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.password != "" ? Color.green : Color.gray ,lineWidth: 2))
+                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.password != "" ? Color(red: 119/255, green: 140/255, blue: 236/255) : Color.gray ,lineWidth: 2))
                     .padding(.top, 25)
                 }
                 Spacer(minLength: 20)
@@ -108,7 +108,7 @@ struct SignupView: View {
                         }
                     }
                     .padding()
-                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.rePassword != "" ? Color.green : Color.gray ,lineWidth: 2))
+                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.rePassword != "" ? Color(red: 119/255, green: 140/255, blue: 236/255) : Color.gray ,lineWidth: 2))
                     .padding(.top, 25)
                 }
                 
@@ -127,7 +127,7 @@ struct SignupView: View {
                         .fontWeight(.bold)
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width - 50)
-                        .background(Color.green)
+                        .background(Color(red: 119/255, green: 140/255, blue: 236/255))
                         .cornerRadius(10)
                         .padding(.top, 25)
                 }
