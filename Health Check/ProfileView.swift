@@ -45,6 +45,9 @@ struct ProfileInitView: View {
     }
     
     var body: some View {
+        let backGroundColor = Color(.white)
+        ZStack {
+            backGroundColor.edgesIgnoringSafeArea(.all)
         VStack {
             Text("プロフィール設定")
                 .font(.largeTitle)
@@ -240,7 +243,7 @@ struct ProfileInitView: View {
                             fireauth.getData()
                             self.studentid = (self.studentidstr as NSString).integerValue
                             self.schoolid = (self.schoolidstr as NSString).integerValue
-                            firestore.initUserData(uid: fireauth.uid, mail: fireauth.email!, firstname: self.firstname, lastname: self.lastname, gender: self.genderStr, schoolid: self.schoolid, studentid: self.studentid, nomalbodytemp: self.nomalBodyTemp)
+                            firestore.initUserData(uid: fireauth.uid, mail: fireauth.email!, firstname: self.firstname, lastname: self.lastname, gender: self.genderStr, schoolid: self.schoolid, studentid: self.studentid, grade: self.grade, nomalbodytemp: self.nomalBodyTemp)
                             UserDefaults.standard.set(false, forKey: "isSignedup")
                             NotificationCenter.default.post(name: NSNotification.Name("isSignedup"), object: nil)
                             UserDefaults.standard.set(false, forKey: "isLoggedin")
@@ -272,6 +275,7 @@ struct ProfileInitView: View {
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        }
     }
 }
 
@@ -519,7 +523,7 @@ struct ProfileEditView: View {
                         Button(action:{
                             self.studentid = (self.studentidstr as NSString).integerValue
                             self.schoolid = (self.schoolidstr as NSString).integerValue
-                            firestore.updateUserData(uid: fireauth.uid, mail: fireauth.email!, firstname: self.firstname, lastname: self.lastname, gender: self.genderStr, schoolid: self.schoolid, studentid: self.studentid, nomalbodytemp: self.nomalBodyTemp)
+                            firestore.updateUserData(uid: fireauth.uid, mail: fireauth.email!, firstname: self.firstname, lastname: self.lastname, gender: self.genderStr, schoolid: self.schoolid, studentid: self.studentid, grade: self.grade,  nomalbodytemp: self.nomalBodyTemp)
                             UserDefaults.standard.set(self.nomalBodyTemp, forKey: "nomalBodyTemp")
                             NotificationCenter.default.post(name: NSNotification.Name("nomalBodyTemp"), object: nil)
                             self.isEditOn.toggle()
@@ -556,6 +560,7 @@ struct ProfileEditView: View {
                     self.lastname = self.firestore.userdata.lastname
                     self.schoolidstr = String(self.firestore.userdata.schoolid)
                     self.studentidstr = String(self.firestore.userdata.studentid)
+                    self.grade = self.firestore.userdata.grade
                     
                     self.nomalBodyTemp = self.firestore.userdata.nomalbodytemp
                     self.nomalBodyTempNum = Int(floor(self.nomalBodyTemp))
