@@ -34,7 +34,7 @@ struct LoginView: View {
                     TextField("メールアドレス", text: self.$mail)
                     .autocapitalization(.none)
                     .padding()
-                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.mail != "" ? Color.blue : Color.gray ,lineWidth: 2))
+                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.mail != "" ? Color(red: 62/255, green: 74/255, blue: 141/255) : Color.gray ,lineWidth: 2))
                         .padding(.top, 25)
                 }
                 Spacer(minLength: 20)
@@ -66,7 +66,7 @@ struct LoginView: View {
                         }
                     }
                     .padding()
-                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.password != "" ? Color.blue : Color.gray ,lineWidth: 2))
+                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.password != "" ? Color(red: 62/255, green: 74/255, blue: 141/255) : Color.gray ,lineWidth: 2))
                     .padding(.top, 25)
                 }
                 Spacer(minLength: 20)
@@ -83,7 +83,7 @@ struct LoginView: View {
                         .fontWeight(.bold)
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width - 50)
-                        .background(Color.blue)
+                        .background(Color(red: 62/255, green: 74/255, blue: 141/255))
                         .cornerRadius(10)
                         .padding(.top, 25)
                 }
