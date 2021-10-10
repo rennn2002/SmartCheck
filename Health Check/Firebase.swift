@@ -72,15 +72,15 @@ class FireStore: ObservableObject {
     
     var db = Firestore.firestore()
     
-    @Published var userdata = UserData(firstname: "", lastname: "", gender: "", mail: "", uid: "", schoolid: 0, studentid: 0, nomalbodytemp: 36.5)
+    @Published var userdata = UserData(firstname: "", lastname: "", gender: "", mail: "", uid: "", schoolid: 0, studentid: 0, grade: 1, nomalbodytemp: 36.5)
     
     @Published var tempdata = TempData(bodytemp: 0.0, symptom: false, posttime: Timestamp())
     
     init() {
     }
     
-    func updateUserData(uid:String, mail:String, firstname: String, lastname: String, gender:String, schoolid: Int, studentid: Int, nomalbodytemp: Float) {
-        db.collection("users").document(uid).setData(["uid":uid, "mail":mail, "firstname":firstname, "lastname":lastname, "gender":gender, "schoolid": schoolid, "studentid": studentid, "nomalbodytemp": nomalbodytemp]) { error in
+    func updateUserData(uid:String, mail:String, firstname: String, lastname: String, gender:String, schoolid: Int, studentid: Int, grade: Int, nomalbodytemp: Float) {
+        db.collection("users").document(uid).setData(["uid":uid, "mail":mail, "firstname":firstname, "lastname":lastname, "gender":gender, "schoolid": schoolid, "studentid": studentid, "grade": grade, "nomalbodytemp": nomalbodytemp]) { error in
             if let error = error {
                 print(error)
                 return
@@ -88,55 +88,71 @@ class FireStore: ObservableObject {
         }
     }
     
-    func postForm(uid: String, bodytemp: Float, symptom: Bool, posttime: Date) {
+    func postForm(uid: String, bodytemp: Float, symptom: Bool, posttime: Date, completion: @escaping(Bool)->()) {
+        let group = DispatchGroup()
+        
+        group.enter()
         db.collection("data").document(uid).setData(["bodytemp": bodytemp, "symptom": symptom, "posttime": posttime]) { error in
             if let error = error {
                 print(error)
                 return
             }
-        }
-    }
-    
-    func getForm(uid: String) {
-        db.collection("data").document(uid).getDocument { snapshot, error in
-            guard let data = snapshot?.data() else { return }
-            
-            self.tempdata.bodytemp = data["bodytemp"] as! Float
-            self.tempdata.symptom = data["symptom"] as! Bool
-            self.tempdata.posttime = data["posttime"] as! Timestamp
-        }
-    }
-    
-    
-    func getUserData(uid:String, completion: @escaping(Bool)->()) {
-        let group = DispatchGroup()
-        
-        group.enter()
-        db.collection("users").document(uid).getDocument { snapshot, error in
-            guard let data = snapshot?.data() else { return }
-   
-            self.userdata.firstname = data["firstname"] as! String
-            self.userdata.lastname = data["lastname"] as! String
-            self.userdata.gender = data["gender"] as! String
-            self.userdata.mail = data["mail"] as! String
-            self.userdata.schoolid = data["schoolid"] as! Int
-            self.userdata.studentid = data["studentid"] as! Int
-            self.userdata.nomalbodytemp = data["nomalbodytemp"] as! Float
             group.leave()
-        }
-        group.notify(queue: DispatchQueue.global(qos: .background)) {
-            completion(true)
-        }
-    }
-    
-    func initUserData(uid:String, mail:String, firstname: String, lastname: String, gender:String, schoolid: Int, studentid: Int, nomalbodytemp: Float) {
-        db.collection("users").document(uid).setData(["uid":uid, "mail":mail, "firstname":firstname, "lastname":lastname, "gender":gender, "schoolid":schoolid, "studentid":studentid, "nomalbodytemp": nomalbodytemp]) { error in
-            if let error = error {
-                print(error)
-                return
+            
+            group.notify(queue: DispatchQueue.global(qos: .background)) {
+                completion(true)
             }
         }
     }
-}
+        
+        func getForm(uid: String, completion: @escaping(Bool)->()) {
+            let group = DispatchGroup()
+            
+            group.enter()
+            db.collection("data").document(uid).getDocument { snapshot, error in
+                guard let data = snapshot?.data() else { return }
+                
+                self.tempdata.bodytemp = data["bodytemp"] as! Float
+                self.tempdata.symptom = data["symptom"] as! Bool
+                self.tempdata.posttime = data["posttime"] as! Timestamp
+                group.leave()
+            }
+            group.notify(queue: DispatchQueue.global(qos: .background)) {
+                completion(true)
+            }
+        }
+        
+        
+        func getUserData(uid:String, completion: @escaping(Bool)->()) {
+            let group = DispatchGroup()
+            
+            group.enter()
+            db.collection("users").document(uid).getDocument { snapshot, error in
+                guard let data = snapshot?.data() else { return }
+                
+                self.userdata.firstname = data["firstname"] as! String
+                self.userdata.lastname = data["lastname"] as! String
+                self.userdata.gender = data["gender"] as! String
+                self.userdata.mail = data["mail"] as! String
+                self.userdata.schoolid = data["schoolid"] as! Int
+                self.userdata.studentid = data["studentid"] as! Int
+                self.userdata.grade = data["grade"] as! Int
+                self.userdata.nomalbodytemp = data["nomalbodytemp"] as! Float
+                group.leave()
+            }
+            group.notify(queue: DispatchQueue.global(qos: .background)) {
+                completion(true)
+            }
+        }
+        
+        func initUserData(uid:String, mail:String, firstname: String, lastname: String, gender:String, schoolid: Int, studentid: Int, grade: Int, nomalbodytemp: Float) {
+            db.collection("users").document(uid).setData(["uid":uid, "mail":mail, "firstname":firstname, "lastname":lastname, "gender":gender, "schoolid":schoolid, "studentid":studentid, "grade": grade, "nomalbodytemp": nomalbodytemp]) { error in
+                if let error = error {
+                    print(error)
+                    return
+                }
+            }
+        }
+    }
 
 
