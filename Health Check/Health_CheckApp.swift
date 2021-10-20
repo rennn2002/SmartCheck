@@ -49,18 +49,20 @@ struct MedsalonApp: App {
 }
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate ,GIDSignInDelegate {
-    var notification: Notification = Notification()
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        //        UNUserNotificationCenter.current()
-        //          .requestAuthorization(options: [.alert, .sound, .badge]) { (granted, _) in
-        //            print("Permission granted: \(granted)")
-        //          }
+//        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (granted, _) in
+//            print("Permission granted: \(granted)")
+//            UIApplication.shared.applicationIconBadgeNumber = 1
+//        }
         //        UNUserNotificationCenter.current().delegate = self
         //        let appDomain = Bundle.main.bundleIdentifier
-        //       UserDefaults.standard.removePersistentDomain(forName: appDomain!)
+        //        UserDefaults.standard.removePersistentDomain(forName: appDomain!)
         NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
-            print("entered")
-            self.notification.makeNotificationOnSchedule()
+            let notificationTimeHour: Int = UserDefaults.standard.value(forKey: "notificationTimeHour") as? Int ?? 8
+            let notificationTimeMinute: Int = UserDefaults.standard.value(forKey: "notificationTimeMinute") as? Int ?? 0
+            let notification: Notification = Notification() //make an instance here
+
+            notification.makeNotificationOnSchedule(notificationTimeHour: notificationTimeHour, notificationTimeMinute: notificationTimeMinute)
         }
         FirebaseApp.configure()
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
@@ -68,18 +70,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         return true
     }
+    
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        UserDefaults.standard.set(true, forKey: "isWaitingShow")
-        NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)
-        UserDefaults.standard.set(false, forKey: "isGuidanceShow")
-        NotificationCenter.default.post(name: NSNotification.Name("isGuidanceShow"), object: nil)
+        
         if error != nil{
             
             print(error.localizedDescription)
             return
         }
         let credential = GoogleAuthProvider.credential(withIDToken: user.authentication.idToken, accessToken: user.authentication.accessToken)
-        
+        UserDefaults.standard.set(true, forKey: "isWaitingShow")
+        NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)
+        UserDefaults.standard.set(false, forKey: "isGuidanceShow")
+        NotificationCenter.default.post(name: NSNotification.Name("isGuidanceShow"), object: nil)
         Auth.auth().signIn(with: credential) { (res, err) in
             
             if err != nil{
