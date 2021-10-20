@@ -24,6 +24,9 @@
 		BC5AF7172710321B0041C4CB /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5AF7162710321B0041C4CB /* ProfileInfoView.swift */; };
 		BC5AF7182710321B0041C4CB /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5AF7162710321B0041C4CB /* ProfileInfoView.swift */; };
 		BC5AF7192710321B0041C4CB /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5AF7162710321B0041C4CB /* ProfileInfoView.swift */; };
+		BC9DB99D271969AD006C9179 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9DB99C271969AD006C9179 /* ErrorView.swift */; };
+		BC9DB99E271969AD006C9179 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9DB99C271969AD006C9179 /* ErrorView.swift */; };
+		BC9DB99F271969AD006C9179 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9DB99C271969AD006C9179 /* ErrorView.swift */; };
 		BCACBF0427026C86001D5400 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BCACBF0327026C86001D5400 /* GoogleService-Info.plist */; };
 		BCACBF0527026C86001D5400 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BCACBF0327026C86001D5400 /* GoogleService-Info.plist */; };
 		BCACBF0627026C86001D5400 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BCACBF0327026C86001D5400 /* GoogleService-Info.plist */; };
@@ -105,6 +108,7 @@
 		BC1C946327046CBA00D3B6BE /* GoogleSignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignIn.swift; sourceTree = "<group>"; };
 		BC5AF712271024F60041C4CB /* Security.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Security.swift; sourceTree = "<group>"; };
 		BC5AF7162710321B0041C4CB /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
+		BC9DB99C271969AD006C9179 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		BCACBF0327026C86001D5400 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		BCACBF0727026E08001D5400 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		BCACBF0B270273C4001D5400 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
@@ -218,9 +222,10 @@
 				BC18716A270BC373002DA886 /* ListView.swift */,
 				BC5AF712271024F60041C4CB /* Security.swift */,
 				BC1C946327046CBA00D3B6BE /* GoogleSignIn.swift */,
-				BCACBF2727036B5C001D5400 /* FormView.swift */,
 				BCE2774027135F61009C416C /* WaitingView.swift */,
+				BCACBF2727036B5C001D5400 /* FormView.swift */,
 				BCACBF2327028C71001D5400 /* CheckFormView.swift */,
+				BC9DB99C271969AD006C9179 /* ErrorView.swift */,
 				BCACBF1F27028958001D5400 /* Userdata.swift */,
 				BCACBF0B270273C4001D5400 /* SignupView.swift */,
 				BCACBF1327027891001D5400 /* LoginView.swift */,
@@ -545,6 +550,7 @@
 				BC187177270D5E3E002DA886 /* MainView.swift in Sources */,
 				BCE2774127135F61009C416C /* WaitingView.swift in Sources */,
 				BCB92D15270F12C600DC3C0C /* GuidanceView.swift in Sources */,
+				BC9DB99D271969AD006C9179 /* ErrorView.swift in Sources */,
 				BC18716B270BC373002DA886 /* ListView.swift in Sources */,
 				BCACBF2427028C71001D5400 /* CheckFormView.swift in Sources */,
 				BC5AF713271024F60041C4CB /* Security.swift in Sources */,
@@ -583,6 +589,7 @@
 				BCACBF0927026E08001D5400 /* Firebase.swift in Sources */,
 				BCACBF1927028121001D5400 /* HomeView.swift in Sources */,
 				BC18716C270BC373002DA886 /* ListView.swift in Sources */,
+				BC9DB99E271969AD006C9179 /* ErrorView.swift in Sources */,
 				BCB92D12270EED5A00DC3C0C /* Notification.swift in Sources */,
 				BCACBF1527027891001D5400 /* LoginView.swift in Sources */,
 				BCACBF1D27028574001D5400 /* ProfileView.swift in Sources */,
@@ -609,6 +616,7 @@
 				BCACBF0A27026E08001D5400 /* Firebase.swift in Sources */,
 				BCACBF1A27028121001D5400 /* HomeView.swift in Sources */,
 				BC18716D270BC373002DA886 /* ListView.swift in Sources */,
+				BC9DB99F271969AD006C9179 /* ErrorView.swift in Sources */,
 				BCB92D13270EED5A00DC3C0C /* Notification.swift in Sources */,
 				BCACBF1627027891001D5400 /* LoginView.swift in Sources */,
 				BCACBF1E27028574001D5400 /* ProfileView.swift in Sources */,
