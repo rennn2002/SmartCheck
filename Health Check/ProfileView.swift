@@ -28,6 +28,11 @@ struct ProfileInitView: View {
     @State var showPicker: Bool = false
     
     @State var isNomalBodyTempPicker: Bool = false
+    
+    @State var alert: Bool = false
+    @State var error: String = "NO ERROR"
+    @State var buttonColor: Color = Color.green
+    
     var genderOptions = ["🙍‍♂️ 男性", "🙍‍♀️ 女性", "その他"]
     
     func convertGender(gender:Int) -> (String) {
@@ -45,236 +50,263 @@ struct ProfileInitView: View {
     }
     
     var body: some View {
-        let backGroundColor = Color(.white)
-        ZStack {
-            backGroundColor.edgesIgnoringSafeArea(.all)
-        VStack {
-            Text("プロフィール設定")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
-            
-            ScrollView {
+        ZStack(alignment: .center) {
+            let backGroundColor = Color(.white)
+            ZStack {
+                backGroundColor.edgesIgnoringSafeArea(.all)
                 VStack {
-                    Spacer(minLength: 50)
-                        .fixedSize()
+                    Text("プロフィール設定")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding()
                     
-                    Group {
+                    ScrollView {
                         VStack {
-                            Group {
-                                HStack {
-                                    Text("氏名")
-                                        .fontWeight(.bold)
-                                    Spacer(minLength:0)
-                                }
-                                
-                                HStack {
-                                    TextField("姓", text: self.$lastname)
-                                    
-                                    TextField("名", text: self.$firstname)
-                                    
-                                }
-                                
-                                Divider()
-                                
-                                Spacer(minLength: 20)
-                                    .fixedSize()
-                            }
+                            Spacer(minLength: 50)
+                                .fixedSize()
                             
                             Group {
-                                HStack {
-                                    Text("学年")
-                                        .fontWeight(.bold)
-                                    Spacer(minLength:0)
-                                }
-                                
-                                HStack {
-                                    
-                                    Text("第\(self.grade)学年")
-                                    
-                                }
-                                .onTapGesture {
-                                    self.showPicker.toggle()
-                                }
-                                .sheet(isPresented: self.$showPicker) {
-                                    ZStack(alignment: .topLeading) {
-                                        VStack {
-                                            Spacer(minLength: 0)
-                                            ModalView(grade: self.$grade).padding(.vertical)
-                                            Spacer(minLength: 0)
-                                        }
-                                        Button(action: {self.showPicker.toggle()}) {
-                                            Text("Close")
+                                VStack {
+                                    Group {
+                                        HStack {
+                                            Text("氏名")
                                                 .fontWeight(.bold)
+                                            Spacer(minLength:0)
                                         }
-                                    }.padding(25)
-                                }
-                                Divider()
-                                
-                                Spacer(minLength: 20)
-                                    .fixedSize()
-                            }
-                            
-                            Group {
-                                HStack {
-                                    Text("学籍番号")
-                                        .fontWeight(.bold)
-                                    Spacer(minLength:0)
-                                }
-                                
-                                HStack {
-                                    TextField("8桁の学籍番号", text: self.$schoolidstr)
-                                        .keyboardType(.numberPad)
-                                }
-                                
-                                Divider()
-                                
-                                Spacer(minLength: 20)
-                                    .fixedSize()
-                            }
-                            
-                            Group {
-                                HStack {
-                                    Text("学生番号")
-                                        .fontWeight(.bold)
-                                    Spacer(minLength:0)
-                                }
-                                
-                                HStack {
-                                    TextField("4桁の学籍番号", text: self.$studentidstr)
-                                        .keyboardType(.numberPad)
-                                }
-                                
-                                Divider()
-                                
-                                Spacer(minLength: 20)
-                                    .fixedSize()
-                            }
-                            
-                            Group {
-                                HStack {
-                                    Text("平熱")
-                                        .fontWeight(.bold)
-                                    Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
-                                }
-                                
-                                HStack {
-                                    Text(String(self.nomalBodyTemp))
-                                        .font(.title2)
-                                        .fontWeight(.bold)
+                                        
+                                        HStack {
+                                            TextField("姓", text: self.$lastname)
+                                            
+                                            TextField("名", text: self.$firstname)
+                                            
+                                        }
+                                        
+                                        Divider()
+                                        
+                                        Spacer(minLength: 20)
+                                            .fixedSize()
+                                    }
+                                    
+                                    Group {
+                                        HStack {
+                                            Text("学年")
+                                                .fontWeight(.bold)
+                                            Spacer(minLength:0)
+                                        }
+                                        
+                                        HStack {
+                                            
+                                            Text("第\(self.grade)学年")
+                                            
+                                        }
                                         .onTapGesture {
-                                            self.isNomalBodyTempPicker.toggle()
+                                            self.showPicker.toggle()
                                         }
-                                        .sheet(isPresented: self.$isNomalBodyTempPicker) {
+                                        .sheet(isPresented: self.$showPicker) {
                                             ZStack(alignment: .topLeading) {
                                                 VStack {
-                                                    Spacer(minLength: 50)
-                                                        .fixedSize()
-                                                    
-                                                    HStack {
-                                                        Text("平熱")
-                                                            .font(.title2)
-                                                            .fontWeight(.bold)
-                                                        Text(String(Float(self.nomalBodyTempNum + 35)+(Float(self.nomalBodyTempPoint)/10)))
-                                                            .font(.title2)
-                                                            .fontWeight(.bold)
-                                                    }
-                                                    
-                                                    ModalTempView(nomalBodyTemp: self.$nomalBodyTemp, nomalBodyTempNum: self.$nomalBodyTempNum, nomalBodyTempPoint: self.$nomalBodyTempPoint)
-                                                        .padding(.vertical)
-                                                    Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
+                                                    Spacer(minLength: 0)
+                                                    ModalView(grade: self.$grade).padding(.vertical)
+                                                    Spacer(minLength: 0)
                                                 }
-                                                Button(action: {
-                                                    self.nomalBodyTempNum = self.nomalBodyTempNum + 35
-                                                    self.nomalBodyTempPointFloat = Float(self.nomalBodyTempPoint)/10
-                                                    
-                                                    self.nomalBodyTemp = Float(self.nomalBodyTempNum) +  self.nomalBodyTempPointFloat
-                                                    self.isNomalBodyTempPicker.toggle()
-                                                }) {
+                                                Button(action: {self.showPicker.toggle()}) {
                                                     Text("Close")
                                                         .fontWeight(.bold)
                                                 }
                                             }.padding(25)
                                         }
+                                        Divider()
+                                        
+                                        Spacer(minLength: 20)
+                                            .fixedSize()
+                                    }
                                     
-                                    Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
+                                    Group {
+                                        HStack {
+                                            Text("学籍番号")
+                                                .fontWeight(.bold)
+                                            Spacer(minLength:0)
+                                        }
+                                        
+                                        HStack {
+                                            TextField("8桁の学籍番号", text: self.$schoolidstr)
+                                                .keyboardType(.numberPad)
+                                        }
+                                        
+                                        Divider()
+                                        
+                                        Spacer(minLength: 20)
+                                            .fixedSize()
+                                    }
+                                    
+                                    Group {
+                                        HStack {
+                                            Text("学生番号")
+                                                .fontWeight(.bold)
+                                            Spacer(minLength:0)
+                                        }
+                                        
+                                        HStack {
+                                            TextField("4桁の学籍番号", text: self.$studentidstr)
+                                                .keyboardType(.numberPad)
+                                        }
+                                        
+                                        Divider()
+                                        
+                                        Spacer(minLength: 20)
+                                            .fixedSize()
+                                    }
+                                    
+                                    Group {
+                                        HStack {
+                                            Text("平熱")
+                                                .fontWeight(.bold)
+                                            Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
+                                        }
+                                        
+                                        HStack {
+                                            Text(String(self.nomalBodyTemp))
+                                                .font(.title2)
+                                                .fontWeight(.bold)
+                                                .onTapGesture {
+                                                    self.isNomalBodyTempPicker.toggle()
+                                                }
+                                                .sheet(isPresented: self.$isNomalBodyTempPicker) {
+                                                    ZStack(alignment: .topLeading) {
+                                                        VStack {
+                                                            Spacer(minLength: 50)
+                                                                .fixedSize()
+                                                            
+                                                            HStack {
+                                                                Text("平熱")
+                                                                    .font(.title2)
+                                                                    .fontWeight(.bold)
+                                                                Text(String(Float(self.nomalBodyTempNum + 35)+(Float(self.nomalBodyTempPoint)/10)))
+                                                                    .font(.title2)
+                                                                    .fontWeight(.bold)
+                                                            }
+                                                            
+                                                            ModalTempView(nomalBodyTemp: self.$nomalBodyTemp, nomalBodyTempNum: self.$nomalBodyTempNum, nomalBodyTempPoint: self.$nomalBodyTempPoint)
+                                                                .padding(.vertical)
+                                                            Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
+                                                        }
+                                                        Button(action: {
+                                                            self.nomalBodyTempNum = self.nomalBodyTempNum + 35
+                                                            self.nomalBodyTempPointFloat = Float(self.nomalBodyTempPoint)/10
+                                                            
+                                                            self.nomalBodyTemp = Float(self.nomalBodyTempNum) +  self.nomalBodyTempPointFloat
+                                                            self.isNomalBodyTempPicker.toggle()
+                                                        }) {
+                                                            Text("Close")
+                                                                .fontWeight(.bold)
+                                                        }
+                                                    }.padding(25)
+                                                }
+                                            
+                                            Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
+                                        }
+                                        
+                                    }
+                                }.onTapGesture {
+                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                }
+                                Divider()
+                                
+                                Spacer(minLength: 20)
+                                    .fixedSize()
+                                Group {
+                                    HStack {
+                                        Text("性別")
+                                            .fontWeight(.bold)
+                                        Spacer(minLength: 0)
+                                    }
+                                    Picker("Gender", selection: $gender) {
+                                        ForEach(0..<genderOptions.count) {
+                                            Text(self.genderOptions[$0])
+                                        }
+                                    }.pickerStyle(SegmentedPickerStyle())
+                                    .onChange(of: gender) { (Int) -> (Void) in
+                                        var genderConverted: String = ""
+                                        if gender == 0 {
+                                            genderConverted = "男性"
+                                        } else if gender == 1 {
+                                            genderConverted = "女性"
+                                        } else {
+                                            genderConverted = "その他"
+                                        }
+                                        self.genderStr = genderConverted
+                                    }
+                                    
+                                    Spacer(minLength: 20)
+                                        .fixedSize()
+                                    Divider()
+                                    
+                                    Spacer(minLength: 20)
+                                        .fixedSize()
                                 }
                                 
-                            }
-                        }.onTapGesture {
-                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                        }
-                        Divider()
-                        
-                        Spacer(minLength: 20)
-                            .fixedSize()
-                        Group {
-                            HStack {
-                                Text("性別")
-                                    .fontWeight(.bold)
-                                Spacer(minLength: 0)
-                            }
-                            Picker("Gender", selection: $gender) {
-                                ForEach(0..<genderOptions.count) {
-                                    Text(self.genderOptions[$0])
+                                Button(action:{
+                                    self.studentid = (self.studentidstr as NSString).integerValue
+                                    self.schoolid = (self.schoolidstr as NSString).integerValue
+                                    if self.firstname != "" && self.lastname != "" && self.schoolid != 0 && self.studentid != 0 {
+                                        fireauth.getData() { result, error in
+                                            if result {
+                                              //NO ERROR
+                                            } else {
+                                                self.alert.toggle()
+                                                self.error = error
+                                            }
+                                        }
+                                        firestore.initUserData(uid: fireauth.uid, mail: fireauth.email!, firstname: self.firstname, lastname: self.lastname, gender: self.genderStr, schoolid: self.schoolid, studentid: self.studentid, grade: self.grade, nomalbodytemp: self.nomalBodyTemp) { result, error in
+                                            if result {
+                                                // NO ERROR
+                                                UserDefaults.standard.set(false, forKey: "isSignedup")
+                                                NotificationCenter.default.post(name: NSNotification.Name("isSignedup"), object: nil)
+                                                UserDefaults.standard.set(false, forKey: "isLoggedin")
+                                                NotificationCenter.default.post(name: NSNotification.Name("isLoggedin"), object: nil)
+                                                UserDefaults.standard.set(true, forKey: "isGuidanceShow")
+                                                NotificationCenter.default.post(name: NSNotification.Name("isGuidanceShow"), object: nil)
+                                                
+                                                UserDefaults.standard.set(self.nomalBodyTemp, forKey: "nomalBodyTemp")
+                                                NotificationCenter.default.post(name: NSNotification.Name("nomalBodyTemp"), object: nil)
+                                            } else {
+                                                self.alert.toggle()
+                                                self.error = error
+                                            }
+                                        }
+                                    } else {
+                                        self.alert.toggle()
+                                        self.error = "NOT FILLED"
+                                    }
+                                }) {
+                                    Text("登録")
+                                        .foregroundColor(.white)
+                                        .font(.title)
+                                        .fontWeight(.bold)
+                                        .padding(.vertical)
+                                        .frame(width: UIScreen.main.bounds.width - 50)
+                                        .background(Color.green)
+                                        .cornerRadius(10)
+                                        .padding(.top, 25)
                                 }
-                            }.pickerStyle(SegmentedPickerStyle())
-                            .onChange(of: gender) { (Int) -> (Void) in
-                                var genderConverted: String = ""
-                                if gender == 0 {
-                                    genderConverted = "男性"
-                                } else if gender == 1 {
-                                    genderConverted = "女性"
-                                } else {
-                                    genderConverted = "その他"
-                                }
-                                self.genderStr = genderConverted
                             }
+                            Spacer(minLength: 0)
                             
-                            Spacer(minLength: 20)
-                                .fixedSize()
-                            Divider()
-                            
-                            Spacer(minLength: 20)
-                                .fixedSize()
-                        }
-                        
-                        Button(action:{
-                            fireauth.getData()
-                            self.studentid = (self.studentidstr as NSString).integerValue
-                            self.schoolid = (self.schoolidstr as NSString).integerValue
-                            firestore.initUserData(uid: fireauth.uid, mail: fireauth.email!, firstname: self.firstname, lastname: self.lastname, gender: self.genderStr, schoolid: self.schoolid, studentid: self.studentid, grade: self.grade, nomalbodytemp: self.nomalBodyTemp)
-                            UserDefaults.standard.set(false, forKey: "isSignedup")
-                            NotificationCenter.default.post(name: NSNotification.Name("isSignedup"), object: nil)
-                            UserDefaults.standard.set(false, forKey: "isLoggedin")
-                            NotificationCenter.default.post(name: NSNotification.Name("isLoggedin"), object: nil)
-                            UserDefaults.standard.set(true, forKey: "isGuidanceShow")
-                            NotificationCenter.default.post(name: NSNotification.Name("isGuidanceShow"), object: nil)
-                            
-                            UserDefaults.standard.set(self.nomalBodyTemp, forKey: "nomalBodyTemp")
-                            NotificationCenter.default.post(name: NSNotification.Name("nomalBodyTemp"), object: nil)
-                        }) {
-                            Text("登録")
-                                .foregroundColor(.white)
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .padding(.vertical)
-                                .frame(width: UIScreen.main.bounds.width - 50)
-                                .background(Color.green)
-                                .cornerRadius(10)
-                                .padding(.top, 25)
+                        }.padding(.horizontal, 25)
+                        .onAppear() {
+                            fireauth.getData() {_, _ in
+                                
+                            }
                         }
                     }
-                    Spacer(minLength: 0)
-                    
-                }.padding(.horizontal, 25)
-                .onAppear() {
-                    fireauth.getData()
                 }
+                .navigationBarHidden(true)
+                .navigationBarBackButtonHidden(true)
             }
-        }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
+            
+            if self.alert {
+                ErrorView(alert: self.$alert, error: self.$error, buttonColor: self.$buttonColor)
+            }
         }
     }
 }
@@ -552,7 +584,9 @@ struct ProfileEditView: View {
             }.padding()
         }
         .onAppear() {
-            fireauth.getData()
+            fireauth.getData() {_, _ in
+                
+            }
             firestore.getUserData(uid: fireauth.uid) { result in
                 if result {
                     print(self.firestore.userdata.schoolid)
