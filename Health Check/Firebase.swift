@@ -16,38 +16,39 @@ class FireAuth {
     var email:String? = ""
     var name:String? = ""
     
-    func login(mail: String, password: String, res: @escaping(Bool)->()) {
-        Auth.auth().signIn(withEmail: mail, password: password) { authResult, error in
+    func login(mail: String, password: String, res: @escaping(Bool, String)->()) {
+        Auth.auth().signIn(withEmail: mail, password: password) { authResult, error_msg in
             if authResult?.user != nil {
-                res(true)
+                res(true, "NO ERROR")
                 UserDefaults.standard.set(true, forKey: "isLoggedin")
                 NotificationCenter.default.post(name: NSNotification.Name("isLoggedin"), object: nil)
             } else {
-                res(false)
+                res(false, error_msg!.localizedDescription)
             }
         }
     }
     
-    func signup(mail: String, password: String, res: @escaping(Bool)->()) {
-        Auth.auth().createUser(withEmail: mail, password: password) { authResult, error in
-            if let user = authResult?.user {
-                dump(user)
-                res(true)
+    func signup(mail: String, password: String, res: @escaping(Bool, String)->()) {
+        Auth.auth().createUser(withEmail: mail, password: password) { authResult, error_msg in
+            if (authResult?.user) != nil {
+                res(true, "NO ERROR")
                 UserDefaults.standard.set(true, forKey: "isSignedup")
                 NotificationCenter.default.post(name: NSNotification.Name("isSignedup"), object: nil)
             } else {
-                dump(error)
-                res(false)
+                res(false, error_msg!.localizedDescription)
             }
         }
     }
     
-    func getData() {
+    func getData(res: @escaping(Bool, String)->()) {
         let user = Auth.auth().currentUser
         if let user = user {
             uid = user.uid
             email = user.email
             name = user.displayName
+            res(true, "NO ERROR")
+        } else {
+            res(false, "予期せぬエラーが発生しました")
         }
     }
     //check email
@@ -88,19 +89,20 @@ class FireStore: ObservableObject {
         }
     }
     
-    func postForm(uid: String, bodytemp: Float, symptom: Bool, posttime: Date, completion: @escaping(Bool)->()) {
+    func postForm(uid: String, bodytemp: Float, symptom: Bool, posttime: Date, completion: @escaping(Bool, String)->()) {
         let group = DispatchGroup()
         
         group.enter()
         db.collection("data").document(uid).setData(["bodytemp": bodytemp, "symptom": symptom, "posttime": posttime]) { error in
             if let error = error {
                 print(error)
+                completion(false, error.localizedDescription)
                 return
             }
             group.leave()
             
             group.notify(queue: DispatchQueue.global(qos: .background)) {
-                completion(true)
+                completion(true, "NO ERROR")
             }
         }
     }
@@ -109,6 +111,7 @@ class FireStore: ObservableObject {
             let group = DispatchGroup()
             
             group.enter()
+            completion(false)
             db.collection("data").document(uid).getDocument { snapshot, error in
                 guard let data = snapshot?.data() else { return }
                 
@@ -145,11 +148,18 @@ class FireStore: ObservableObject {
             }
         }
         
-        func initUserData(uid:String, mail:String, firstname: String, lastname: String, gender:String, schoolid: Int, studentid: Int, grade: Int, nomalbodytemp: Float) {
+    func initUserData(uid:String, mail:String, firstname: String, lastname: String, gender:String, schoolid: Int, studentid: Int, grade: Int, nomalbodytemp: Float, res: @escaping(Bool, String)->()) {
             db.collection("users").document(uid).setData(["uid":uid, "mail":mail, "firstname":firstname, "lastname":lastname, "gender":gender, "schoolid":schoolid, "studentid":studentid, "grade": grade, "nomalbodytemp": nomalbodytemp]) { error in
                 if let error = error {
-                    print(error)
+                    //ERROR OCCURED
+                    res(false, error.localizedDescription)
+                    //RESET STATE
+                    let appDomain = Bundle.main.bundleIdentifier
+                    UserDefaults.standard.removePersistentDomain(forName: appDomain!)
                     return
+                } else {
+                    // NO ERROR
+                    res(true, "NO ERROR")
                 }
             }
         }
