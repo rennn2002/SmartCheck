@@ -1,9 +1,9 @@
-//
-//  GoogleSignIn.swift
-//  Health Check
-//
-//  Created by Nomura Rentaro on 2021/09/29.
-//
+////
+////  GoogleSignIn.swift
+////  Health Check
+////
+////  Created by Nomura Rentaro on 2021/09/29.
+////
 //import UIKit
 //import GoogleSignIn
 //import FirebaseAuth
@@ -115,4 +115,4 @@
 //
 //    }
 //}
-
+//

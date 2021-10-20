@@ -19,6 +19,12 @@ struct FormView: View {
     
     @State var isFormPosted: Bool = UserDefaults.standard.value(forKey: "isFormPosted") as? Bool ?? false
     
+    @State var alert: Bool = false
+    @State var error: String = "NO ERROR"
+    @State var buttonColor: Color = Color.green
+    
+    @State var isLoading: Bool = false
+    
     var fireauth: FireAuth = FireAuth()
     @ObservedObject var firestore: FireStore = FireStore()
     
@@ -27,7 +33,8 @@ struct FormView: View {
             if self.isFormPosted {
                 CheckFormView()
             } else {
-                GeometryReader { geometry in
+                ZStack {
+                    GeometryReader { geometry in
                     
                     VStack(alignment: .center) {
                         Text("入力フォーム")
@@ -114,28 +121,37 @@ struct FormView: View {
                                         }.padding(25)
                                     }
                                 
-                                HStack {
                                     Toggle(isOn: self.$term) {
                                         Text("上記個人情報の提供について同意し回答します")
                                             .font(.footnote)
                                             .fontWeight(.bold)
-                                    }
-                                }.padding(.vertical, 20)
+                                 
+                                    }.padding(5)
+                                
                             }
                             if self.term {
                                 Button(action:{
-                                    fireauth.getData()
+                                    fireauth.getData() {_, _ in
+                                        
+                                    }
                                     let dt = Date()
                                     let dateFormatter = DateFormatter()
                                     dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHm", options: 0, locale: Locale(identifier: "ja_JP"))
                                     
-                                    firestore.postForm(uid: fireauth.uid, bodytemp: self.bodyTemp ,symptom: self.symptom, posttime: dt) { result in
+                                    firestore.postForm(uid: fireauth.uid, bodytemp: self.bodyTemp ,symptom: self.symptom, posttime: dt) { result, error in
                                         if result {
                                             //after submission complete
+                                            self.isLoading = false
                                             self.bodyTemp = Float(self.bodyTempNum + 35)+(Float(self.bodyTempPoint)/10)
                                             print(self.bodyTemp)
                                             UserDefaults.standard.set(true, forKey: "isFormPosted")
                                             NotificationCenter.default.post(name: NSNotification.Name("isFormPosted"), object: nil)
+                                           
+                                            UIApplication.shared.applicationIconBadgeNumber = 0
+                                        } else {
+                                            self.isLoading = true
+                                            self.alert.toggle()
+                                            self.error = error
                                         }
                                     }
                                 }) {
@@ -156,6 +172,10 @@ struct FormView: View {
                     .navigationBarHidden(true)
                     .navigationBarBackButtonHidden(true)
                     
+                }
+                    if self.alert {
+                        ErrorView(alert: self.$alert, error: self.$error, buttonColor: self.$buttonColor)
+                        }
                 }
             }
         }

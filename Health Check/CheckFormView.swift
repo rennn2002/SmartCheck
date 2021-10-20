@@ -17,11 +17,14 @@ struct CheckFormView: View {
     @State var currentDay: String = ""
     @State var postDate: String = ""
     
+    @State var isLoading: Bool = false
+        
     var fireauth: FireAuth = FireAuth()
     @ObservedObject var firestore: FireStore = FireStore()
     
     var body: some View {
-        VStack {
+        ZStack {
+            VStack {
             Image("check")
                 .resizable()
                 .frame(width:UIScreen.main.bounds.width*0.35, height: UIScreen.main.bounds.width*0.35)
@@ -73,9 +76,12 @@ struct CheckFormView: View {
                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
             }.padding(25)
         }.onAppear {
-            fireauth.getData()
+            fireauth.getData() { _, _ in
+                
+            }
             firestore.getForm(uid: fireauth.uid) { result in
                 if result {
+                    self.isLoading = false
                     self.bodyTemp = firestore.tempdata.bodytemp
                     self.symptom = firestore.tempdata.symptom
                     
@@ -98,7 +104,7 @@ struct CheckFormView: View {
                     let dt = Date()
                     dateFormatter.locale = Locale(identifier: "ja_JP")
                     dateFormatter.dateStyle = .medium
-                    dateFormatter.dateFormat = "yyyy/MM/d HH:m"
+                    dateFormatter.dateFormat = "yyyy/MM/d HH:mm"
                     
                     self.currentTime = dateFormatter.string(from: dt)
                     dateFormatter.locale = Locale(identifier: "ja_JP")
@@ -114,8 +120,17 @@ struct CheckFormView: View {
                     } else {
                         UserDefaults.standard.set(true, forKey: "isFormPosted")
                         NotificationCenter.default.post(name: NSNotification.Name("isFormPosted"), object: nil)
+                        
+                        UIApplication.shared.applicationIconBadgeNumber = 0
                     }
+                } else {
+                    self.isLoading = true
                 }
+            }
+        }
+            
+            if self.isLoading {
+             //   LoadingView(isLoading: self.$isLoading)
             }
         }
     }
