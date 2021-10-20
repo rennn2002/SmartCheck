@@ -8,123 +8,157 @@
 import SwiftUI
 import UserNotifications
 import FirebaseAuth
+import GoogleSignIn
 
 struct SettingView: View {
     var fireauth: FireAuth = FireAuth()
     @ObservedObject var firestore: FireStore = FireStore()
+    var notification: Notification = Notification()
+    
     @State var isEditOn: Bool = false
     
     @State var isNotificationOn: Bool = UserDefaults.standard.value(forKey: "isNotificationOn") as? Bool ?? false
-    var notification: Notification = Notification()
+    
+    @State var notificationTime: Date = Date()
+    @State var notificationTimeStr: String = ""
+    
+    @State var notificationTimeHour: Int = UserDefaults.standard.value(forKey: "notificationTimeHour") as? Int ?? 8
+    @State var notificationTimeMinute: Int = UserDefaults.standard.value(forKey: "notificationTimeMinute") as? Int ?? 0
+    
+    @State private var showingAlert = false
     
     var body: some View {
         NavigationView {
             VStack {
-            Text("設定")
-                .font(.title)
-                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                .padding()
-            
-            Divider()
-            
-            VStack {
-                Group {
-                    HStack {
-                        Text("通知設定")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                        Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
-                    }
-                    Divider()
-                    Toggle(isOn: self.$isNotificationOn) {
-                        Text(self.isNotificationOn ? "通知オン":"通知オフ")
-                            .fontWeight(.bold)
-                    }.onChange(of: self.isNotificationOn) { newValue in
-                        if newValue {
-                            UNUserNotificationCenter.current()
-                                .requestAuthorization(options: [.alert, .sound, .badge]) { (granted, _) in
-                                    if granted {
-                                        UserDefaults.standard.set(true, forKey: "isNotificationOn")
-                                        NotificationCenter.default.post(name: NSNotification.Name("isNotificationOn"), object: nil)
-                                    } else {
-                                        self.isNotificationOn = false
-                                        UserDefaults.standard.set(false, forKey: "isNotificationOn")
-                                        NotificationCenter.default.post(name: NSNotification.Name("isNotificationOn"), object: nil)
-                                    }
+                Text("設定")
+                    .font(.title)
+                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                    .padding()
+                
+                VStack {
+                    Form {
+                        Section(header:Text("通知設定")) {
+                            Toggle(isOn: self.$isNotificationOn) {
+                                Text(self.isNotificationOn ? "通知オン":"通知オフ")
+                                    .fontWeight(.bold)
+                            }.onChange(of: self.isNotificationOn) { newValue in
+                                if newValue {
+                                    print("called")
+                                    UNUserNotificationCenter.current()
+                                        .requestAuthorization(options: [.alert, .sound, .badge]) { (granted, _) in
+                                            print("Permission granted: \(granted)")
+                                        }
+                                    UserDefaults.standard.set(true, forKey: "isNotificationOn")
+                                    NotificationCenter.default.post(name: NSNotification.Name("isNotificationOn"), object: nil)
+                                } else {
+                                    UserDefaults.standard.set(false, forKey: "isNotificationOn")
+                                    NotificationCenter.default.post(name: NSNotification.Name("isNotificationOn"), object: nil)
                                 }
-                        } else {
-                            UserDefaults.standard.set(false, forKey: "isNotificationOn")
-                            NotificationCenter.default.post(name: NSNotification.Name("isNotificationOn"), object: nil)
-                        }
-                    }
-                    .padding(.vertical)
-                    
-                }
-                
-                Button(action:{
-                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound, .badge]){
-                        (granted, _) in
-                        if granted {
+                            }
+//                            Button(action:{
+//                                UNUserNotificationCenter.current().requestAuthorization(options: [.alert,.sound, .badge]){
+//                                    (granted, _) in
+//                                    if granted {
+//
+//                                        self.notification.makeNotificationOnDemand()
+//                                    }else {
+//
+//                                    }
+//                                }
+//                            }) {
+//                                Text("通知送信テスト(アプリを閉じてください)")
+//                            }
                             
-                            self.notification.makeNotificationOnDemand()
-                        }else {
-
+                            DatePicker(selection: self.$notificationTime, displayedComponents: .hourAndMinute, label: {Text("通知時刻").fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/) })
+                                .onChange(of: self.notificationTime) { newValue in
+                                    let dateFormatter = DateFormatter()
+                                    dateFormatter.locale = Locale(identifier: "ja_JP")
+                                    dateFormatter.dateStyle = .medium
+                                    dateFormatter.dateFormat = "H"
+                                    self.notificationTimeHour = Int(dateFormatter.string(from: newValue))!
+                                    dateFormatter.dateFormat = "m"
+                                    self.notificationTimeMinute = Int(dateFormatter.string(from: newValue))!
+                                    print(String(self.notificationTimeHour))
+                                    print(String(self.notificationTimeMinute))
+                                    UserDefaults.standard.set(self.notificationTimeHour, forKey: "notificationTimeHour")
+                                    NotificationCenter.default.post(name: NSNotification.Name("notificationTimeHour"), object: nil)
+                                    UserDefaults.standard.set(self.notificationTimeMinute, forKey: "notificationTimeMinute")
+                                    NotificationCenter.default.post(name: NSNotification.Name("notificationTimeMinute"), object: nil)
+                                }
                         }
-                    }
-                }) {
-                    Text("通知送信")
-                }
-                
-                Spacer(minLength:  0)
-                
-                Group {
-                    NavigationLink(destination: ProfileEditView(isEditOn: self.$isEditOn), isActive: self.$isEditOn) {
-                        Text("登録情報変更")
-                            .foregroundColor(.white)
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .padding(.vertical)
-                            .frame(width: UIScreen.main.bounds.width - 50)
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                            .padding(.top, 5)
+                        Section(header: Text("アカウント設定")) {
+                            NavigationLink(destination: ProfileEditView(isEditOn: self.$isEditOn), isActive: self.$isEditOn) {
+                                Text("登録情報変更")
+                                    .foregroundColor(.blue)
+                                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                
+                            }.navigationBarHidden(true)
+                            .navigationBarBackButtonHidden(true)
+                            
+                            Button(action:{
+                                self.showingAlert = true
+                            }) {
+                                HStack {
+                                    Image(systemName: "square.and.pencil")
+                                        .foregroundColor(Color(red: 119/255, green: 140/255, blue: 236/255))
+                                    Text("ログアウト")
+                                        .foregroundColor(Color(red: 119/255, green: 140/255, blue: 236/255))
+                                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                }.alert(isPresented: self.$showingAlert) {
+                                    Alert(title: Text("警告"),
+                                          message: Text("本当にログアウトしますか？"),
+                                          primaryButton: .cancel(Text("キャンセル")),
+                                          secondaryButton: .destructive(Text("ログアウト"), action: { GIDSignIn.sharedInstance()?.signOut()
+                                                                            try! Auth.auth().signOut()
+                                                                            UserDefaults.standard.set(false, forKey: "isLoggedin")
+                                                                            NotificationCenter.default.post(name: NSNotification.Name("isLoggedin"), object: nil)}))
+                                }
+                            }
+                            
+                        }.navigationBarHidden(true)
+                        .navigationBarBackButtonHidden(true)
                         
-                    }.navigationBarHidden(true)
-                    .navigationBarBackButtonHidden(true)
+                    }
                     
-                    Button(action:{
-                        try! Auth.auth().signOut()
-                        UserDefaults.standard.set(false, forKey: "isLoggedin")
-                        NotificationCenter.default.post(name: NSNotification.Name("isLoggedin"), object: nil)
-                        
-                    }) {
-                        Text("ログアウト")
-                            .foregroundColor(.white)
-                            .font(.title3)
-                            .fontWeight(.bold)
-                            .padding(.vertical)
-                            .frame(width: UIScreen.main.bounds.width - 50)
-                            .background(Color.red)
-                            .cornerRadius(10)
-                            .padding(.top, 5)
-                    }
-                }
-            }.padding(25)
-        }
-        }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
-        .onAppear {
-            fireauth.getData()
-            NotificationCenter.default.addObserver(forName: NSNotification.Name("isNotificationOn"), object: nil, queue: .main) { (_) in
-                self.isNotificationOn = UserDefaults.standard.value(forKey: "isNotificationOn") as? Bool ?? false
+                    Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
+                }.navigationBarHidden(true)
+                .navigationBarBackButtonHidden(true)
             }
-        }
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
+            .onAppear {
+                fireauth.getData { _, _ in
+                    
+                }
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("isNotificationOn"), object: nil, queue: .main) { (_) in
+                    self.isNotificationOn = UserDefaults.standard.value(forKey: "isNotificationOn") as? Bool ?? false
+                }
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("notificationTimeHour"), object: nil, queue: .main) { (_) in
+                    self.notificationTimeHour = UserDefaults.standard.value(forKey: "notificationTimeHour") as? Int ?? 8
+                }
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("notificationTimeMinute"), object: nil, queue: .main) { (_) in
+                    self.notificationTimeMinute = UserDefaults.standard.value(forKey: "notificationTimeMinute") as? Int ?? 0
+                }
+                let notificationTimeStr = String(self.notificationTimeHour) + ":" + String(self.notificationTimeMinute)
+                self.notificationTime = DateUtils.dateFromString(string: notificationTimeStr, format: "H:m")
+            }
+        }.navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
 struct SettingView_Previews: PreviewProvider {
     static var previews: some View {
         SettingView()
+    }
+}
+
+class DateUtils {
+    class func dateFromString(string: String, format: String) -> Date {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.dateFormat = format
+        return formatter.date(from: string)!
     }
 }

@@ -19,6 +19,12 @@ struct FormView: View {
     
     @State var isFormPosted: Bool = UserDefaults.standard.value(forKey: "isFormPosted") as? Bool ?? false
     
+    @State var alert: Bool = false
+    @State var error: String = "NO ERROR"
+    @State var buttonColor: Color = Color.green
+    
+    @State var isLoading: Bool = false
+    
     var fireauth: FireAuth = FireAuth()
     @ObservedObject var firestore: FireStore = FireStore()
     
@@ -27,16 +33,17 @@ struct FormView: View {
             if self.isFormPosted {
                 CheckFormView()
             } else {
-                GeometryReader { geometry in
-                    ScrollView {
-                        VStack(alignment: .center) {
-                            Text("入力フォーム")
-                                .font(.title)
-                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                .padding()
-                            Divider()
-                            
-                            
+                ZStack {
+                    GeometryReader { geometry in
+                    
+                    VStack(alignment: .center) {
+                        Text("入力フォーム")
+                            .font(.title)
+                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            .padding()
+                        Divider()
+                        
+                        ScrollView {
                             HStack {
                                 Text("体温")
                                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
@@ -47,6 +54,8 @@ struct FormView: View {
                             Text(String(Float(self.bodyTempNum + 35)+(Float(self.bodyTempPoint)/10)))
                                 .font(.largeTitle)
                                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                .frame(width: geometry.size.width-50, height: 50)
+                                .contentShape(Rectangle())
                                 .onTapGesture {
                                     self.isPickerShow.toggle()
                                 }
@@ -60,14 +69,17 @@ struct FormView: View {
                                         ForEach(35 ..< 41) {
                                             Text("\($0)")
                                         }
-                                    }.frame(maxWidth: geometry.size.width/2-25)
+                                    }.frame(maxWidth: geometry.size.width/2-25, maxHeight: 120)
                                     .clipped()
+                                    
                                     Picker(selection: self.$bodyTempPoint, label: EmptyView()) {
                                         ForEach(0 ..< 10) {
                                             Text("\($0)")
                                         }
-                                    }.frame(maxWidth: geometry.size.width/2-25)
+                                    }.frame(maxWidth: geometry.size.width/2-25, maxHeight: 120)
                                     .clipped()
+                                }.onTapGesture {
+                                    self.isPickerShow.toggle()
                                 }
                             }
                             Group {
@@ -109,24 +121,39 @@ struct FormView: View {
                                         }.padding(25)
                                     }
                                 
-                                HStack {
                                     Toggle(isOn: self.$term) {
                                         Text("上記個人情報の提供について同意し回答します")
                                             .font(.footnote)
-                                    }
-                                }.padding(.vertical, 20)
+                                            .fontWeight(.bold)
+                                 
+                                    }.padding(5)
+                                
                             }
                             if self.term {
                                 Button(action:{
-                                    self.bodyTemp = Float(self.bodyTempNum + 35)+(Float(self.bodyTempPoint)/10)
-                                    print(self.bodyTemp)
-                                    UserDefaults.standard.set(true, forKey: "isFormPosted")
-                                    NotificationCenter.default.post(name: NSNotification.Name("isFormPosted"), object: nil)
-                                    fireauth.getData()
+                                    fireauth.getData() {_, _ in
+                                        
+                                    }
                                     let dt = Date()
                                     let dateFormatter = DateFormatter()
                                     dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHm", options: 0, locale: Locale(identifier: "ja_JP"))
-                                    firestore.postForm(uid: fireauth.uid, bodytemp: self.bodyTemp ,symptom: self.symptom, posttime: dt)
+                                    
+                                    firestore.postForm(uid: fireauth.uid, bodytemp: self.bodyTemp ,symptom: self.symptom, posttime: dt) { result, error in
+                                        if result {
+                                            //after submission complete
+                                            self.isLoading = false
+                                            self.bodyTemp = Float(self.bodyTempNum + 35)+(Float(self.bodyTempPoint)/10)
+                                            print(self.bodyTemp)
+                                            UserDefaults.standard.set(true, forKey: "isFormPosted")
+                                            NotificationCenter.default.post(name: NSNotification.Name("isFormPosted"), object: nil)
+                                           
+                                            UIApplication.shared.applicationIconBadgeNumber = 0
+                                        } else {
+                                            self.isLoading = true
+                                            self.alert.toggle()
+                                            self.error = error
+                                        }
+                                    }
                                 }) {
                                     Text("送信")
                                         .foregroundColor(.white)
@@ -137,13 +164,18 @@ struct FormView: View {
                                         .background(Color.green)
                                         .cornerRadius(10)
                                         .padding(.top, 25)
-                                }
+                                }.padding(.vertical, 25)
                             }
                             Spacer(minLength: 0)
-                        }.padding(.horizontal, 25)
-                        .navigationBarHidden(true)
-                        .navigationBarBackButtonHidden(true)
-                    }
+                        }
+                    }.padding(.horizontal, 25)
+                    .navigationBarHidden(true)
+                    .navigationBarBackButtonHidden(true)
+                    
+                }
+                    if self.alert {
+                        ErrorView(alert: self.$alert, error: self.$error, buttonColor: self.$buttonColor)
+                        }
                 }
             }
         }

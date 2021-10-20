@@ -18,6 +18,15 @@
 		BC1C946427046CBA00D3B6BE /* GoogleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1C946327046CBA00D3B6BE /* GoogleSignIn.swift */; };
 		BC1C946527046CBA00D3B6BE /* GoogleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1C946327046CBA00D3B6BE /* GoogleSignIn.swift */; };
 		BC1C946627046CBA00D3B6BE /* GoogleSignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1C946327046CBA00D3B6BE /* GoogleSignIn.swift */; };
+		BC5AF713271024F60041C4CB /* Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5AF712271024F60041C4CB /* Security.swift */; };
+		BC5AF714271024F60041C4CB /* Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5AF712271024F60041C4CB /* Security.swift */; };
+		BC5AF715271024F60041C4CB /* Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5AF712271024F60041C4CB /* Security.swift */; };
+		BC5AF7172710321B0041C4CB /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5AF7162710321B0041C4CB /* ProfileInfoView.swift */; };
+		BC5AF7182710321B0041C4CB /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5AF7162710321B0041C4CB /* ProfileInfoView.swift */; };
+		BC5AF7192710321B0041C4CB /* ProfileInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5AF7162710321B0041C4CB /* ProfileInfoView.swift */; };
+		BC9DB99D271969AD006C9179 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9DB99C271969AD006C9179 /* ErrorView.swift */; };
+		BC9DB99E271969AD006C9179 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9DB99C271969AD006C9179 /* ErrorView.swift */; };
+		BC9DB99F271969AD006C9179 /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC9DB99C271969AD006C9179 /* ErrorView.swift */; };
 		BCACBF0427026C86001D5400 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BCACBF0327026C86001D5400 /* GoogleService-Info.plist */; };
 		BCACBF0527026C86001D5400 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BCACBF0327026C86001D5400 /* GoogleService-Info.plist */; };
 		BCACBF0627026C86001D5400 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BCACBF0327026C86001D5400 /* GoogleService-Info.plist */; };
@@ -63,6 +72,9 @@
 		BCDA0346270269CD00D44D51 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BCDA0345270269CD00D44D51 /* Preview Assets.xcassets */; };
 		BCDA0351270269CD00D44D51 /* Health_CheckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDA0350270269CD00D44D51 /* Health_CheckTests.swift */; };
 		BCDA035C270269CD00D44D51 /* Health_CheckUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDA035B270269CD00D44D51 /* Health_CheckUITests.swift */; };
+		BCE2774127135F61009C416C /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE2774027135F61009C416C /* WaitingView.swift */; };
+		BCE2774227135F61009C416C /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE2774027135F61009C416C /* WaitingView.swift */; };
+		BCE2774327135F61009C416C /* WaitingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE2774027135F61009C416C /* WaitingView.swift */; };
 		E9A36B4EAEAD8E9F58D6EFF8 /* Pods_Health_CheckTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4A4CBDEFC89AF9B5FE87940 /* Pods_Health_CheckTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -94,6 +106,9 @@
 		BC18716A270BC373002DA886 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		BC187176270D5E3E002DA886 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		BC1C946327046CBA00D3B6BE /* GoogleSignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignIn.swift; sourceTree = "<group>"; };
+		BC5AF712271024F60041C4CB /* Security.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Security.swift; sourceTree = "<group>"; };
+		BC5AF7162710321B0041C4CB /* ProfileInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileInfoView.swift; sourceTree = "<group>"; };
+		BC9DB99C271969AD006C9179 /* ErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorView.swift; sourceTree = "<group>"; };
 		BCACBF0327026C86001D5400 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		BCACBF0727026E08001D5400 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		BCACBF0B270273C4001D5400 /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
@@ -119,6 +134,7 @@
 		BCDA0357270269CD00D44D51 /* Health CheckUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Health CheckUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCDA035B270269CD00D44D51 /* Health_CheckUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Health_CheckUITests.swift; sourceTree = "<group>"; };
 		BCDA035D270269CD00D44D51 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BCE2774027135F61009C416C /* WaitingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitingView.swift; sourceTree = "<group>"; };
 		D9C6D189A49D8786FBDC075B /* Pods-Health CheckTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Health CheckTests.release.xcconfig"; path = "Target Support Files/Pods-Health CheckTests/Pods-Health CheckTests.release.xcconfig"; sourceTree = "<group>"; };
 		F872A39B9761F7BAA0D420DC /* Pods-Health Check.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Health Check.release.xcconfig"; path = "Target Support Files/Pods-Health Check/Pods-Health Check.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -204,13 +220,17 @@
 				BCACBF0727026E08001D5400 /* Firebase.swift */,
 				BCB92D10270EED5A00DC3C0C /* Notification.swift */,
 				BC18716A270BC373002DA886 /* ListView.swift */,
+				BC5AF712271024F60041C4CB /* Security.swift */,
 				BC1C946327046CBA00D3B6BE /* GoogleSignIn.swift */,
+				BCE2774027135F61009C416C /* WaitingView.swift */,
 				BCACBF2727036B5C001D5400 /* FormView.swift */,
 				BCACBF2327028C71001D5400 /* CheckFormView.swift */,
+				BC9DB99C271969AD006C9179 /* ErrorView.swift */,
 				BCACBF1F27028958001D5400 /* Userdata.swift */,
 				BCACBF0B270273C4001D5400 /* SignupView.swift */,
 				BCACBF1327027891001D5400 /* LoginView.swift */,
 				BCACBF1B27028574001D5400 /* ProfileView.swift */,
+				BC5AF7162710321B0041C4CB /* ProfileInfoView.swift */,
 				BC187176270D5E3E002DA886 /* MainView.swift */,
 				BCB92D14270F12C600DC3C0C /* GuidanceView.swift */,
 				BCACBF0F270273EB001D5400 /* LaunchView.swift */,
@@ -528,9 +548,12 @@
 			files = (
 				BCACBF1C27028574001D5400 /* ProfileView.swift in Sources */,
 				BC187177270D5E3E002DA886 /* MainView.swift in Sources */,
+				BCE2774127135F61009C416C /* WaitingView.swift in Sources */,
 				BCB92D15270F12C600DC3C0C /* GuidanceView.swift in Sources */,
+				BC9DB99D271969AD006C9179 /* ErrorView.swift in Sources */,
 				BC18716B270BC373002DA886 /* ListView.swift in Sources */,
 				BCACBF2427028C71001D5400 /* CheckFormView.swift in Sources */,
+				BC5AF713271024F60041C4CB /* Security.swift in Sources */,
 				BCB92D11270EED5A00DC3C0C /* Notification.swift in Sources */,
 				BCACBF1427027891001D5400 /* LoginView.swift in Sources */,
 				BCACBF1827028121001D5400 /* HomeView.swift in Sources */,
@@ -541,6 +564,7 @@
 				BCACBF2027028958001D5400 /* Userdata.swift in Sources */,
 				BCACBF0827026E08001D5400 /* Firebase.swift in Sources */,
 				BCDA0341270269CB00D44D51 /* ContentView.swift in Sources */,
+				BC5AF7172710321B0041C4CB /* ProfileInfoView.swift in Sources */,
 				BCDA033F270269CB00D44D51 /* Health_CheckApp.swift in Sources */,
 				BCACBF2827036B5C001D5400 /* FormView.swift in Sources */,
 			);
@@ -550,10 +574,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC5AF714271024F60041C4CB /* Security.swift in Sources */,
 				BC1C946527046CBA00D3B6BE /* GoogleSignIn.swift in Sources */,
 				BC187178270D5E3E002DA886 /* MainView.swift in Sources */,
 				BCACBF0D270273C4001D5400 /* SignupView.swift in Sources */,
+				BC5AF7182710321B0041C4CB /* ProfileInfoView.swift in Sources */,
 				BCB92D0E270E94FC00DC3C0C /* SettingView.swift in Sources */,
+				BCE2774227135F61009C416C /* WaitingView.swift in Sources */,
 				BCACBF2527028C71001D5400 /* CheckFormView.swift in Sources */,
 				BCACBF2927036B5C001D5400 /* FormView.swift in Sources */,
 				BCACBF11270273EB001D5400 /* LaunchView.swift in Sources */,
@@ -562,6 +589,7 @@
 				BCACBF0927026E08001D5400 /* Firebase.swift in Sources */,
 				BCACBF1927028121001D5400 /* HomeView.swift in Sources */,
 				BC18716C270BC373002DA886 /* ListView.swift in Sources */,
+				BC9DB99E271969AD006C9179 /* ErrorView.swift in Sources */,
 				BCB92D12270EED5A00DC3C0C /* Notification.swift in Sources */,
 				BCACBF1527027891001D5400 /* LoginView.swift in Sources */,
 				BCACBF1D27028574001D5400 /* ProfileView.swift in Sources */,
@@ -573,10 +601,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC5AF715271024F60041C4CB /* Security.swift in Sources */,
 				BC1C946627046CBA00D3B6BE /* GoogleSignIn.swift in Sources */,
 				BC187179270D5E3E002DA886 /* MainView.swift in Sources */,
 				BCACBF0E270273C4001D5400 /* SignupView.swift in Sources */,
+				BC5AF7192710321B0041C4CB /* ProfileInfoView.swift in Sources */,
 				BCB92D0F270E94FC00DC3C0C /* SettingView.swift in Sources */,
+				BCE2774327135F61009C416C /* WaitingView.swift in Sources */,
 				BCACBF2627028C71001D5400 /* CheckFormView.swift in Sources */,
 				BCACBF2A27036B5C001D5400 /* FormView.swift in Sources */,
 				BCACBF12270273EB001D5400 /* LaunchView.swift in Sources */,
@@ -585,6 +616,7 @@
 				BCACBF0A27026E08001D5400 /* Firebase.swift in Sources */,
 				BCACBF1A27028121001D5400 /* HomeView.swift in Sources */,
 				BC18716D270BC373002DA886 /* ListView.swift in Sources */,
+				BC9DB99F271969AD006C9179 /* ErrorView.swift in Sources */,
 				BCB92D13270EED5A00DC3C0C /* Notification.swift in Sources */,
 				BCACBF1627027891001D5400 /* LoginView.swift in Sources */,
 				BCACBF1E27028574001D5400 /* ProfileView.swift in Sources */,
