@@ -176,7 +176,9 @@ struct DetailView: View {
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            fireauth.getData()
+            fireauth.getData() {_, _ in
+                
+            }
             firestore.getUserData(uid: fireauth.uid) { result in
                 self.firstname = self.firestore.userdata.firstname
                 self.lastname = self.firestore.userdata.lastname

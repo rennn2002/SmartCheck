@@ -40,6 +40,7 @@ struct GuidanceView: View {
                     
                 }.padding(.horizontal, 25)
                 Button(action:{
+                    UIApplication.shared.applicationIconBadgeNumber = 0
                     UserDefaults.standard.set(false, forKey: "isNotificationOn")
                     NotificationCenter.default.post(name: NSNotification.Name("isNotificationOn"), object: nil)
                     
