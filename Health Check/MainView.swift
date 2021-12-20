@@ -22,6 +22,7 @@ struct MainView: View {
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
             NotificationCenter.default.addObserver(forName: NSNotification.Name("isFormPosted"), object: nil, queue: .main) { (_) in
                 self.isFormPosted = UserDefaults.standard.value(forKey: "isFormPosted") as? Bool ?? false

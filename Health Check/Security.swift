@@ -12,9 +12,9 @@ class Security {
     func biometricsAuth(res: @escaping(Bool)->()) {
         let context = LAContext()
         var error: NSError?
-        let description: String = "プロフィールの表示"
+        let description: String = "プロフィールの表示・変更"
 
-        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+        if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
 
             context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: description, reply: {success, evaluateError in
                 if (success) {

@@ -23,7 +23,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.62891179128-ltgf3vo4v9ug6o40lqhc46hiaobg77er</string>
+				<string>com.googleusercontent.apps.139663324564-bft2babt28c1a7jj50uju0i4shjuptmv</string>
 			</array>
 		</dict>
 	</array>
@@ -50,7 +50,7 @@
 		<string>armv7</string>
 	</array>
 	<key>UIRequiresFullScreen</key>
-	<false/>
+	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

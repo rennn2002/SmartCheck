@@ -8,6 +8,7 @@
 import SwiftUI
 import GoogleSignIn
 import FirebaseAuth
+import Firebase
 
 struct LaunchView: View {
     @State var showLogin = false
@@ -22,7 +23,6 @@ struct LaunchView: View {
     let backGroundColor = Color(red: 96/255, green: 123/255, blue: 184/255)
     
     var body: some View {
-        NavigationView {
             ZStack {
                 backGroundColor.edgesIgnoringSafeArea(.all)
                 VStack {
@@ -79,8 +79,53 @@ struct LaunchView: View {
                         }
                         
                         Button(action:{
-                            GIDSignIn.sharedInstance()?.presentingViewController = UIApplication.shared.windows.first?.rootViewController
-                            GIDSignIn.sharedInstance()?.signIn()
+//                            GIDSignIn.sharedInstance()?.presentingViewController = UIApplication.shared.windows.first?.rootViewController
+//                            GIDSignIn.sharedInstance()?.signIn()
+                            guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+                            let config = GIDConfiguration(clientID: clientID)
+                            
+                            GIDSignIn.sharedInstance.signIn(with: config, presenting: getRootViewController()) { user, err in
+                                if let error = err {
+                                    print(error.localizedDescription)
+                                    return
+                                }
+                                guard let authentication = user?.authentication, let idToken = authentication.idToken
+                                
+                                else {
+                                    return
+                                }
+                                
+                                let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
+                                UserDefaults.standard.set(true, forKey: "isWaitingShow")
+                                NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)
+                                UserDefaults.standard.set(false, forKey: "isGuidanceShow")
+                                NotificationCenter.default.post(name: NSNotification.Name("isGuidanceShow"), object: nil)
+                                Auth.auth().signIn(with: credential) { result, err in
+                                    if let error = err {
+                                        print(error.localizedDescription)
+                                        return
+                                    }
+                                    if let user = Auth.auth().currentUser {
+                                        let db = Firestore.firestore()
+                                        let ref = db.collection("users").document(user.uid)
+                                        ref.getDocument { (document, error) in
+                                            if let document = document, document.exists {
+                                                print("exist")
+                                                UserDefaults.standard.set(false, forKey: "isWaitingShow")
+                                                NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)
+                                                UserDefaults.standard.set(true, forKey: "isLoggedin")
+                                                NotificationCenter.default.post(name: NSNotification.Name("isLoggedin"), object: nil)
+                                            } else {
+                                                print("new")
+                                                UserDefaults.standard.set(false, forKey: "isWaitingShow")
+                                                NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)
+                                                UserDefaults.standard.set(true, forKey: "isSignedup")
+                                                NotificationCenter.default.post(name: NSNotification.Name("isSignedup"), object: nil)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }) {
                             HStack {
                                 Image("google-color")
@@ -104,13 +149,7 @@ struct LaunchView: View {
                         Spacer(minLength:30)
                     }
                 }
-                
-                .navigationBarHidden(true)
-                .navigationBarBackButtonHidden(true)
             }
-        }.navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
-        .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
             UIApplication.shared.applicationIconBadgeNumber = 0 
             NotificationCenter.default.addObserver(forName: NSNotification.Name("isLoggedin"), object: nil, queue: .main) { (_) in
@@ -129,5 +168,18 @@ struct LaunchView: View {
                 self.isNotificationDerived = UserDefaults.standard.value(forKey: "isNotificationDerived") as? Int ?? 0
             }
         }
+    }
+}
+
+extension View {
+    func getRootViewController()->UIViewController {
+        guard let screen = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
+            return .init()
+        }
+        
+        guard let root = screen.windows.first?.rootViewController else {
+            return .init()
+        }
+        return root
     }
 }

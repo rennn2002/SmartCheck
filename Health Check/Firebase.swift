@@ -75,7 +75,7 @@ class FireStore: ObservableObject {
     
     @Published var userdata = UserData(firstname: "", lastname: "", gender: "", mail: "", uid: "", schoolid: 0, studentid: 0, grade: 1, nomalbodytemp: 36.5)
     
-    @Published var tempdata = TempData(bodytemp: 0.0, symptom: false, posttime: Timestamp())
+    @Published var tempdata = TempData(firstname:"", lastname:"", schoolid: 0, studentid: 0, bodytemp: 0.0, symptom: false, posttime: Timestamp(), mail:"")
     
     init() {
     }
@@ -89,11 +89,10 @@ class FireStore: ObservableObject {
         }
     }
     
-    func postForm(uid: String, bodytemp: Float, symptom: Bool, posttime: Date, completion: @escaping(Bool, String)->()) {
+    func postForm(uid: String, firstname: String, lastname: String, schoolid: Int, studentid: Int, bodytemp: Float, symptom: Bool, posttime: Date, mail: String, completion: @escaping(Bool, String)->()) {
         let group = DispatchGroup()
-        
         group.enter()
-        db.collection("data").document(uid).setData(["bodytemp": bodytemp, "symptom": symptom, "posttime": posttime]) { error in
+        db.collection("data").document(uid).setData(["firstname": firstname, "lastname": lastname, "schoolid": schoolid, "studentid": studentid, "bodytemp": bodytemp, "symptom": symptom, "posttime": posttime, "mail": mail]) { error in
             if let error = error {
                 print(error)
                 completion(false, error.localizedDescription)

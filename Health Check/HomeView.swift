@@ -52,107 +52,106 @@ struct DetailView: View {
     @State var isProfileShow: Bool = false
     
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack {
-                    Text("登録情報")
-                        .font(.title)
-                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                        .padding()
-                    
-                    Divider()
-                    
-                    if isProfileShow {
-                        VStack {
+        ScrollView {
+            VStack {
+                Text("登録情報")
+                    .font(.title)
+                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                    .padding()
+                
+                Divider()
+                
+                if isProfileShow {
+                    VStack {
+                        Group {
+                            Text("氏名")
+                                .font(.title3)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            Spacer(minLength: 10)
+                                .fixedSize()
+                            HStack {
+                                Text(self.lastname)
+                                    .font(.title3)
+                                
+                                Text(self.firstname)
+                                    .font(.title3)
+                            }
+                            Spacer(minLength: 20)
+                                .fixedSize()
+                        }
+                        Group {
+                            Text("メール")
+                                .font(.title3)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            Spacer(minLength: 10)
+                                .fixedSize()
+                            Text(String(firestore.userdata.mail))
+                                .font(.title3)
+                            Spacer(minLength: 20)
+                                .fixedSize()
+                        }
+                        
+                        Group {
+                            Text("平熱")
+                                .font(.title3)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            Spacer(minLength: 10)
+                                .fixedSize()
+                            Text(String(self.nomalBodyTemp))
+                                .font(.title3)
+                            Spacer(minLength: 20)
+                                .fixedSize()
+                        }
+                        
+                        Group {
+                            Text("性別")
+                                .font(.title3)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            Spacer(minLength: 10)
+                                .fixedSize()
+                            Text(self.genderStr)
+                                .font(.title3)
+                            Spacer(minLength: 20)
+                                .fixedSize()
+                        }
+                        Group {
                             Group {
-                                Text("氏名")
+                                Text("学籍番号")
                                     .font(.title3)
                                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                                 Spacer(minLength: 10)
                                     .fixedSize()
-                                HStack {
-                                    Text(self.lastname)
-                                        .font(.title3)
-                                    
-                                    Text(self.firstname)
-                                        .font(.title3)
-                                }
+                                Text(String(self.schoolid))
+                                    .font(.title3)
                                 Spacer(minLength: 20)
                                     .fixedSize()
                             }
                             Group {
-                                Text("メール")
+                                Text("学生番号")
                                     .font(.title3)
                                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                                 Spacer(minLength: 10)
                                     .fixedSize()
-                                Text(String(firestore.userdata.mail))
+                                Text(String(self.studentid))
                                     .font(.title3)
                                 Spacer(minLength: 20)
                                     .fixedSize()
                             }
-                            
-                            Group {
-                                Text("平熱")
+                            Button(action:{
+                                self.isProfileShow.toggle()
+                            }) {
+                                Text("隠す")
                                     .font(.title3)
-                                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                Spacer(minLength: 10)
-                                    .fixedSize()
-                                Text(String(self.nomalBodyTemp))
-                                    .font(.title3)
-                                Spacer(minLength: 20)
-                                    .fixedSize()
-                            }
-                            
-                            Group {
-                                Text("性別")
-                                    .font(.title3)
-                                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                Spacer(minLength: 10)
-                                    .fixedSize()
-                                Text(self.genderStr)
-                                    .font(.title3)
-                                Spacer(minLength: 20)
-                                    .fixedSize()
-                            }
-                            Group {
-                                Group {
-                                    Text("学籍番号")
-                                        .font(.title3)
-                                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                    Spacer(minLength: 10)
-                                        .fixedSize()
-                                    Text(String(self.schoolid))
-                                        .font(.title3)
-                                    Spacer(minLength: 20)
-                                        .fixedSize()
-                                }
-                                Group {
-                                    Text("学生番号")
-                                        .font(.title3)
-                                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                    Spacer(minLength: 10)
-                                        .fixedSize()
-                                    Text(String(self.studentid))
-                                        .font(.title3)
-                                    Spacer(minLength: 20)
-                                        .fixedSize()
-                                }
-                                Button(action:{
-                                    self.isProfileShow.toggle()
-                                }) {
-                                    Text("隠す")
-                                        .font(.title3)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.red)
-                                }.padding()
-                            }
-                        }.padding()
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.red)
+                            }.padding()
+                        }
+                    }.padding()
                         .navigationBarHidden(true)
                         .navigationBarBackButtonHidden(true)
-                    }
-                    
-                    if !self.isProfileShow {
+                }
+                
+                if !self.isProfileShow {
                     Button(action: {
                         self.security.biometricsAuth() { result in
                             if result {
@@ -168,13 +167,9 @@ struct DetailView: View {
                             .foregroundColor(.blue)
                     }.padding()
                 }
-                    Spacer(minLength: 0)
-                }.navigationBarHidden(true)
-                .navigationBarBackButtonHidden(true)
+                Spacer(minLength: 0)
             }
         }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
         .onAppear {
             fireauth.getData() {_, _ in
                 

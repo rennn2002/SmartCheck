@@ -11,7 +11,6 @@ struct FormView: View {
     @State var bodyTemp: Float = UserDefaults.standard.object(forKey: "nomalBodyTemp") as? Float ?? 36.5
     @State var bodyTempNum: Int = 0
     @State var bodyTempPoint: Int = 0
-    
     @State var isPickerShow: Bool = false
     @State var symptom: Bool = false
     @State var term: Bool = false
@@ -25,176 +24,204 @@ struct FormView: View {
     
     @State var isLoading: Bool = false
     
+    @State var firstname: String = ""
+    @State var lastname: String = ""
+    @State var schoolid: Int = 0
+    @State var studentid: Int = 0
+    
     var fireauth: FireAuth = FireAuth()
     @ObservedObject var firestore: FireStore = FireStore()
     
     var body: some View {
-        VStack {
-            if self.isFormPosted {
-                CheckFormView()
-            } else {
-                ZStack {
-                    GeometryReader { geometry in
-                    
-                    VStack(alignment: .center) {
-                        Text("入力フォーム")
-                            .font(.title)
-                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                            .padding()
-                        Divider()
-                        
-                        ScrollView {
-                            HStack {
-                                Text("体温")
+        NavigationView {
+            VStack {
+                if self.isFormPosted {
+                    CheckFormView()
+                } else {
+                    ZStack {
+                        GeometryReader { geometry in
+                            
+                            VStack(alignment: .center) {
+                                Text("入力フォーム")
+                                    .font(.title)
                                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                    .padding(.vertical, 25)
-                                Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
-                            }
-                            
-                            Text(String(Float(self.bodyTempNum + 35)+(Float(self.bodyTempPoint)/10)))
-                                .font(.largeTitle)
-                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                .frame(width: geometry.size.width-50, height: 50)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    self.isPickerShow.toggle()
-                                }
-                            
-                            Spacer(minLength: 20)
-                                .fixedSize()
-                            
-                            if self.isPickerShow {
-                                HStack(spacing:0) {
-                                    Picker(selection: self.$bodyTempNum, label: EmptyView()) {
-                                        ForEach(35 ..< 41) {
-                                            Text("\($0)")
-                                        }
-                                    }.frame(maxWidth: geometry.size.width/2-25, maxHeight: 120)
-                                    .clipped()
-                                    
-                                    Picker(selection: self.$bodyTempPoint, label: EmptyView()) {
-                                        ForEach(0 ..< 10) {
-                                            Text("\($0)")
-                                        }
-                                    }.frame(maxWidth: geometry.size.width/2-25, maxHeight: 120)
-                                    .clipped()
-                                }.onTapGesture {
-                                    self.isPickerShow.toggle()
-                                }
-                            }
-                            Group {
-                                HStack {
-                                    Text("自覚症状")
-                                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                    
-                                    Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
-                                }.padding(.vertical)
+                                    .padding()
+                                Divider()
                                 
-                                Picker("Gender", selection: self.$symptom) {
-                                    Text("体温37.5未満で自覚症状なし").tag(false)
-                                    Text("自覚症状がある").tag(true)
-                                }.pickerStyle(SegmentedPickerStyle())
-                                
-                            }
-                            Group {
-                                HStack {
-                                    Text("規約")
-                                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                        .padding(.vertical, 10)
-                                    
-                                    Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
-                                }.padding(.vertical)
-                                Text("規約はこちら")
-                                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                                    .onTapGesture {
-                                        self.isTermShow.toggle()
-                                    }.sheet(isPresented: self.$isTermShow) {
-                                        ZStack(alignment: .topLeading) {
-                                            VStack {
-                                                ModalTermsView().padding(.vertical, 50)
-                                                Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
-                                            }
-                                            Button(action: {self.isTermShow.toggle()}) {
-                                                Text("Close")
-                                                    .fontWeight(.bold)
-                                            }
-                                        }.padding(25)
+                                ScrollView {
+                                    HStack {
+                                        Text("体温")
+                                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                            .padding(.vertical, 25)
+                                        Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
                                     }
-                                
-                                    Toggle(isOn: self.$term) {
-                                        Text("上記個人情報の提供について同意し回答します")
-                                            .font(.footnote)
-                                            .fontWeight(.bold)
-                                 
-                                    }.padding(5)
-                                
-                            }
-                            if self.term {
-                                Button(action:{
-                                    fireauth.getData() {_, _ in
+                                    
+                                    Text(String(Float(self.bodyTempNum + 35)+(Float(self.bodyTempPoint)/10)))
+                                        .font(.largeTitle)
+                                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                        .frame(width: UIScreen.main.bounds.width - 50, height: 50)
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            self.isPickerShow.toggle()
+                                        }
+                                    
+                                    Spacer(minLength: 20)
+                                        .fixedSize()
+                                    
+                                    if self.isPickerShow {
+                                        HStack(spacing:0) {
+                                            Picker(selection: self.$bodyTempNum, label: EmptyView()) {
+                                                ForEach(35 ..< 41) {
+                                                    Text("\($0)")
+                                                }
+                                            }.frame(maxWidth: geometry.size.width/2-25, maxHeight: 120)
+                                                .clipped()
+                                            
+                                            Picker(selection: self.$bodyTempPoint, label: EmptyView()) {
+                                                ForEach(0 ..< 10) {
+                                                    Text("\($0)")
+                                                }
+                                            }.frame(maxWidth: geometry.size.width/2-25, maxHeight: 120)
+                                                .clipped()
+                                        }.onTapGesture {
+                                            self.isPickerShow.toggle()
+                                        }
+                                    }
+                                    Group {
+                                        HStack {
+                                            Text("自覚症状")
+                                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                            
+                                            Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
+                                        }.padding(.vertical)
+                                        
+                                        Picker("Gender", selection: self.$symptom) {
+                                            Text("体温37.5未満で自覚症状なし").tag(false)
+                                            Text("自覚症状がある").tag(true)
+                                        }.pickerStyle(SegmentedPickerStyle())
                                         
                                     }
-                                    let dt = Date()
-                                    let dateFormatter = DateFormatter()
-                                    dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHm", options: 0, locale: Locale(identifier: "ja_JP"))
-                                    
-                                    firestore.postForm(uid: fireauth.uid, bodytemp: self.bodyTemp ,symptom: self.symptom, posttime: dt) { result, error in
-                                        if result {
-                                            //after submission complete
-                                            self.isLoading = false
-                                            self.bodyTemp = Float(self.bodyTempNum + 35)+(Float(self.bodyTempPoint)/10)
-                                            print(self.bodyTemp)
-                                            UserDefaults.standard.set(true, forKey: "isFormPosted")
-                                            NotificationCenter.default.post(name: NSNotification.Name("isFormPosted"), object: nil)
-                                           
-                                            UIApplication.shared.applicationIconBadgeNumber = 0
-                                        } else {
-                                            self.isLoading = true
-                                            self.alert.toggle()
-                                            self.error = error
-                                        }
+                                    Group {
+                                        HStack {
+                                            Text("規約")
+                                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                                .padding(.vertical, 10)
+                                            
+                                            Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
+                                        }.padding(.vertical)
+                                        Text("規約はこちら")
+                                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                            .onTapGesture {
+                                                self.isTermShow.toggle()
+                                            }.sheet(isPresented: self.$isTermShow) {
+                                                ZStack(alignment: .topLeading) {
+                                                    VStack {
+                                                        ModalTermsView().padding(.vertical, 50)
+                                                        Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
+                                                    }
+                                                    Button(action: {self.isTermShow.toggle()}) {
+                                                        Text("Close")
+                                                            .fontWeight(.bold)
+                                                    }
+                                                }.padding(25)
+                                            }
+                                        
+                                        Toggle(isOn: self.$term) {
+                                            Text("上記個人情報の提供について同意し回答します")
+                                                .font(.footnote)
+                                                .fontWeight(.bold)
+                                            
+                                        }.padding(5)
+                                        
                                     }
-                                }) {
-                                    Text("送信")
-                                        .foregroundColor(.white)
-                                        .font(.title3)
-                                        .fontWeight(.bold)
-                                        .padding(.vertical)
-                                        .frame(width: UIScreen.main.bounds.width - 50, height: 40)
-                                        .background(Color.green)
-                                        .cornerRadius(10)
-                                        .padding(.top, 25)
-                                }.padding(.vertical, 25)
-                            }
-                            Spacer(minLength: 0)
+                                    if self.term {
+                                        Button(action:{
+                                            fireauth.getData() {_, _ in
+                                                //obtain userdata from  fireauth
+                                            }
+                                            firestore.getUserData(uid: fireauth.uid, completion: { result in
+                                                self.firstname = self.firestore.userdata.firstname
+                                                self.lastname = self.firestore.userdata.lastname
+                                                self.schoolid = self.firestore.userdata.schoolid
+                                                self.studentid = self.firestore.userdata.studentid
+                                                
+                                                if result {
+                                                    let dt = Date()
+                                                    let dateFormatter = DateFormatter()
+                                                    dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHm", options: 0, locale: Locale(identifier: "ja_JP"))
+                                                    // convert bodytemp from 2 integers to float value
+                                                    self.bodyTemp = Float(self.bodyTempNum + 35)+(Float(self.bodyTempPoint)/10)
+                                                    UIApplication.shared.applicationIconBadgeNumber = 0
+                                                    firestore.postForm(uid: fireauth.uid, firstname: self.firstname, lastname: self.lastname, schoolid: self.schoolid, studentid: self.studentid, bodytemp: self.bodyTemp, symptom: self.symptom, posttime: dt, mail: self.fireauth.email!) { result, error in
+                                                        if result {
+                                                            //after submission complete
+                                                            self.isLoading = false
+                                                            
+                                                            print(self.bodyTemp)
+                                                            UserDefaults.standard.set(true, forKey: "isFormPosted")
+                                                            NotificationCenter.default.post(name: NSNotification.Name("isFormPosted"), object: nil)
+                                                        } else {
+                                                            self.isLoading = true
+                                                            self.alert.toggle()
+                                                            self.error = error
+                                                        }
+                                                    }
+                                                } else {
+                                                    print("still waiting to obtain studentID and schoolID from the firestore")
+                                                }
+                                            })
+                                        }) {
+                                            Text("送信")
+                                                .foregroundColor(.white)
+                                                .font(.title3)
+                                                .fontWeight(.bold)
+                                                .padding(.vertical)
+                                                .frame(width: UIScreen.main.bounds.width - 50, height: 40)
+                                                .background(Color.green)
+                                                .cornerRadius(10)
+                                                .padding(.top, 25)
+                                        }.padding(.vertical, 25)
+                                    }
+                                    
+                                    Spacer(minLength: 0)
+                                    
+                                }
+                            }.padding(.horizontal, 25)
+                                .navigationBarHidden(true)
+                                .navigationBarBackButtonHidden(true)
+                            
                         }
-                    }.padding(.horizontal, 25)
-                    .navigationBarHidden(true)
-                    .navigationBarBackButtonHidden(true)
-                    
-                }
-                    if self.alert {
-                        ErrorView(alert: self.$alert, error: self.$error, buttonColor: self.$buttonColor)
+                        if self.alert {
+                            ErrorView(alert: self.$alert, error: self.$error, buttonColor: self.$buttonColor)
                         }
+                    }
                 }
+            }
+            .onAppear() {
+                fireauth.getData() {_, _ in
+                    //obtain userdata from  fireauth
+                }
+                firestore.getUserData(uid: fireauth.uid, completion: {result in
+                    self.firstname = self.firestore.userdata.firstname
+                    self.lastname = self.firestore.userdata.lastname
+                    self.schoolid = self.firestore.userdata.schoolid
+                    self.studentid = self.firestore.userdata.studentid
+                })
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("nomalBodyTemp"), object: nil, queue: .main) { (_) in
+                    self.bodyTemp = UserDefaults.standard.value(forKey: "nomalBodyTemp") as? Float ?? 36.5
+                }
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("isFormPosted"), object: nil, queue: .main) { (_) in
+                    self.isFormPosted = UserDefaults.standard.value(forKey:"isFormPosted") as? Bool ?? false
+                }
+                self.bodyTempNum = Int(floor(self.bodyTemp))
+                self.bodyTemp = round(self.bodyTemp*10)/10
+                self.bodyTempPoint = Int((round((self.bodyTemp - Float(self.bodyTempNum))*10)/10)*10)
+                self.bodyTempNum = self.bodyTempNum - 35
             }
         }
-        .onAppear() {
-            NotificationCenter.default.addObserver(forName: NSNotification.Name("nomalBodyTemp"), object: nil, queue: .main) { (_) in
-                self.bodyTemp = UserDefaults.standard.value(forKey: "nomalBodyTemp") as? Float ?? 36.5
-            }
-            NotificationCenter.default.addObserver(forName: NSNotification.Name("isFormPosted"), object: nil, queue: .main) { (_) in
-                self.isFormPosted = UserDefaults.standard.value(forKey:"isFormPosted") as? Bool ?? false
-            }
-            self.bodyTempNum = Int(floor(self.bodyTemp))
-            print(Float(self.bodyTempNum))
-            self.bodyTemp = round(self.bodyTemp*10)/10
-            print(bodyTemp)
-            self.bodyTempPoint = Int((round((self.bodyTemp - Float(self.bodyTempNum))*10)/10)*10)
-            print(self.bodyTemp - Float(self.bodyTempNum))
-            print(bodyTempPoint)
-            self.bodyTempNum = self.bodyTempNum - 35
-        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
