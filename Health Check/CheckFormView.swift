@@ -24,6 +24,8 @@ struct CheckFormView: View {
     var fireauth: FireAuth = FireAuth()
     @ObservedObject var firestore: FireStore = FireStore()
     
+    //private var user = UIDocument.userActivityURLKey
+    
     var body: some View {
         NavigationView {
             ZStack {

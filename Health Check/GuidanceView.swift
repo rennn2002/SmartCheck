@@ -36,7 +36,7 @@ struct GuidanceView: View {
                     Text("健康観察を忘れていませんか？Health Checkなら通知でお知らせします")
                         .foregroundColor(.white)
                         .font(.title2)
-                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                        .fontWeight(.bold)
                     
                 }.padding(.horizontal, 25)
                 Button(action:{

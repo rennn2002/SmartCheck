@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import GoogleSignIn
 
 struct FormView: View {
     @State var bodyTemp: Float = UserDefaults.standard.object(forKey: "nomalBodyTemp") as? Float ?? 36.5
@@ -38,7 +39,7 @@ struct FormView: View {
                 if self.isFormPosted {
                     CheckFormView()
                 } else {
-                    ZStack {
+                    ZStack() {
                         GeometryReader { geometry in
                             
                             VStack(alignment: .center) {
@@ -86,6 +87,7 @@ struct FormView: View {
                                         }.onTapGesture {
                                             self.isPickerShow.toggle()
                                         }
+                                        .pickerStyle(.wheel)    // set PickerStyle to wheel
                                     }
                                     Group {
                                         HStack {
