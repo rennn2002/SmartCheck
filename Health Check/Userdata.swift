@@ -8,7 +8,7 @@
 import Foundation
 import Firebase
 
-struct UserData: Hashable {
+struct UserData: Hashable { //users
     var firstname: String
     var lastname: String
     var gender: String
@@ -17,10 +17,10 @@ struct UserData: Hashable {
     var schoolid: Int
     var studentid:Int
     var grade: Int
-    var nomalbodytemp: Float
+    var normalbodytemp: Float
 }
 
-struct TempData {
+struct TempData { //data
     var firstname: String
     var lastname: String
     var schoolid: Int

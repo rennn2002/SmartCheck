@@ -17,17 +17,17 @@ struct ProfileInitView: View {
     @State var studentid: Int = 0
     @State var schoolid: Int = 0
     @State var grade: Int = 1
-    @State var nomalBodyTemp: Float = 36.5
-    @State var nomalBodyTempNum: Int = 0
-    @State var nomalBodyTempPoint: Int = 0
-    @State var nomalBodyTempPointFloat: Float = 0.0
+    @State var normalBodyTemp: Float = 36.5
+    @State var normalBodyTempNum: Int = 0
+    @State var normalBodyTempPoint: Int = 0
+    @State var normalBodyTempPointFloat: Float = 0.0
     
     @State var gender: Int = 0
     @State var genderStr: String = "男性"
     
     @State var showPicker: Bool = false
     
-    @State var isNomalBodyTempPicker: Bool = false
+    @State var isNormalBodyTempPicker: Bool = false
     
     @State var alert: Bool = false
     @State var error: String = "NO ERROR"
@@ -165,13 +165,13 @@ struct ProfileInitView: View {
                                         }
                                         
                                         HStack {
-                                            Text(String(self.nomalBodyTemp))
+                                            Text(String(self.normalBodyTemp))
                                                 .font(.title2)
                                                 .fontWeight(.bold)
                                                 .onTapGesture {
-                                                    self.isNomalBodyTempPicker.toggle()
+                                                    self.isNormalBodyTempPicker.toggle()
                                                 }
-                                                .sheet(isPresented: self.$isNomalBodyTempPicker) {
+                                                .sheet(isPresented: self.$isNormalBodyTempPicker) {
                                                     ZStack(alignment: .topLeading) {
                                                         VStack {
                                                             Spacer(minLength: 50)
@@ -181,21 +181,21 @@ struct ProfileInitView: View {
                                                                 Text("平熱")
                                                                     .font(.title2)
                                                                     .fontWeight(.bold)
-                                                                Text(String(Float(self.nomalBodyTempNum + 35)+(Float(self.nomalBodyTempPoint)/10)))
+                                                                Text(String(Float(self.normalBodyTempNum + 35)+(Float(self.normalBodyTempPoint)/10)))
                                                                     .font(.title2)
                                                                     .fontWeight(.bold)
                                                             }
                                                             
-                                                            ModalTempView(nomalBodyTemp: self.$nomalBodyTemp, nomalBodyTempNum: self.$nomalBodyTempNum, nomalBodyTempPoint: self.$nomalBodyTempPoint)
+                                                            ModalTempView(normalBodyTemp: self.$normalBodyTemp, normalBodyTempNum: self.$normalBodyTempNum, normalBodyTempPoint: self.$normalBodyTempPoint)
                                                                 .padding(.vertical)
                                                             Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
                                                         }
                                                         Button(action: {
-                                                            self.nomalBodyTempNum = self.nomalBodyTempNum + 35
-                                                            self.nomalBodyTempPointFloat = Float(self.nomalBodyTempPoint)/10
+                                                            self.normalBodyTempNum = self.normalBodyTempNum + 35
+                                                            self.normalBodyTempPointFloat = Float(self.normalBodyTempPoint)/10
                                                             
-                                                            self.nomalBodyTemp = Float(self.nomalBodyTempNum) +  self.nomalBodyTempPointFloat
-                                                            self.isNomalBodyTempPicker.toggle()
+                                                            self.normalBodyTemp = Float(self.normalBodyTempNum) +  self.normalBodyTempPointFloat
+                                                            self.isNormalBodyTempPicker.toggle()
                                                         }) {
                                                             Text("Close")
                                                                 .fontWeight(.bold)
@@ -257,7 +257,7 @@ struct ProfileInitView: View {
                                                 self.error = error
                                             }
                                         }
-                                        firestore.initUserData(uid: fireauth.uid, mail: fireauth.email!, firstname: self.firstname, lastname: self.lastname, gender: self.genderStr, schoolid: self.schoolid, studentid: self.studentid, grade: self.grade, nomalbodytemp: self.nomalBodyTemp) { result, error in
+                                        firestore.initUserData(uid: fireauth.uid, mail: fireauth.email!, firstname: self.firstname, lastname: self.lastname, gender: self.genderStr, schoolid: self.schoolid, studentid: self.studentid, grade: self.grade, normalbodytemp: self.normalBodyTemp) { result, error in
                                             if result {
                                                 // NO ERROR
                                                 UserDefaults.standard.set(false, forKey: "isSignedup")
@@ -267,8 +267,8 @@ struct ProfileInitView: View {
                                                 UserDefaults.standard.set(true, forKey: "isGuidanceShow")
                                                 NotificationCenter.default.post(name: NSNotification.Name("isGuidanceShow"), object: nil)
                                                 
-                                                UserDefaults.standard.set(self.nomalBodyTemp, forKey: "nomalBodyTemp")
-                                                NotificationCenter.default.post(name: NSNotification.Name("nomalBodyTemp"), object: nil)
+                                                UserDefaults.standard.set(self.normalBodyTemp, forKey: "normalBodyTemp")
+                                                NotificationCenter.default.post(name: NSNotification.Name("normalBodyTemp"), object: nil)
                                             } else {
                                                 self.alert.toggle()
                                                 self.error = error
@@ -324,17 +324,17 @@ struct ProfileEditView: View {
     @State var studentid: Int = 0
     @State var schoolid: Int = 0
     @State var grade: Int = 1
-    @State var nomalBodyTemp: Float = 36.5
-    @State var nomalBodyTempNum: Int = 0
-    @State var nomalBodyTempPoint: Int = 0
-    @State var nomalBodyTempPointFloat: Float = 0.0
+    @State var normalBodyTemp: Float = 36.5
+    @State var normalBodyTempNum: Int = 0
+    @State var normalBodyTempPoint: Int = 0
+    @State var normalBodyTempPointFloat: Float = 0.0
     
     @State var gender: Int = 0
     @State var genderStr: String = "男性"
     
     @State var showPicker: Bool = false
     
-    @State var isNomalBodyTempPicker: Bool = false
+    @State var isNormalBodyTempPicker: Bool = false
     
     @Binding var isEditOn: Bool
     
@@ -359,7 +359,7 @@ struct ProfileEditView: View {
             ZStack(alignment: .topLeading) {
                 VStack {
                     Text("プロフィール設定")
-                        .font(.largeTitle)
+                        .font(.title)
                         .fontWeight(.bold)
                         .padding()
                    
@@ -469,13 +469,13 @@ struct ProfileEditView: View {
                                         }
                                         
                                         HStack {
-                                            Text(String(self.nomalBodyTemp))
+                                            Text(String(self.normalBodyTemp))
                                                 .font(.title2)
                                                 .fontWeight(.bold)
                                                 .onTapGesture {
-                                                    self.isNomalBodyTempPicker.toggle()
+                                                    self.isNormalBodyTempPicker.toggle()
                                                 }
-                                                .sheet(isPresented: self.$isNomalBodyTempPicker) {
+                                                .sheet(isPresented: self.$isNormalBodyTempPicker) {
                                                     ZStack(alignment: .topLeading) {
                                                         VStack {
                                                             Spacer(minLength: 50)
@@ -485,24 +485,24 @@ struct ProfileEditView: View {
                                                                 Text("平熱")
                                                                     .font(.title2)
                                                                     .fontWeight(.bold)
-                                                                Text(String(Float(self.nomalBodyTempNum + 35)+(Float(self.nomalBodyTempPoint)/10)))
+                                                                Text(String(Float(self.normalBodyTempNum + 35)+(Float(self.normalBodyTempPoint)/10)))
                                                                     .font(.title2)
                                                                     .fontWeight(.bold)
                                                             }
                                                             
-                                                            ModalTempView(nomalBodyTemp: self.$nomalBodyTemp, nomalBodyTempNum: self.$nomalBodyTempNum, nomalBodyTempPoint: self.$nomalBodyTempPoint)
+                                                            ModalTempView(normalBodyTemp: self.$normalBodyTemp, normalBodyTempNum: self.$normalBodyTempNum, normalBodyTempPoint: self.$normalBodyTempPoint)
                                                                 .padding(.vertical)
                                                             Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
                                                         }
                                                         Button(action: {
-                                                            self.nomalBodyTempNum = self.nomalBodyTempNum + 35
-                                                            self.nomalBodyTempPointFloat = round((Float(self.nomalBodyTempPoint)/10)*10)/10
+                                                            self.normalBodyTempNum = self.normalBodyTempNum + 35
+                                                            self.normalBodyTempPointFloat = round((Float(self.normalBodyTempPoint)/10)*10)/10
                                                             
-                                                            self.nomalBodyTemp = round((Float(self.nomalBodyTempNum))*10)/10 + self.nomalBodyTempPointFloat
+                                                            self.normalBodyTemp = round((Float(self.normalBodyTempNum))*10)/10 + self.normalBodyTempPointFloat
                                                             
-                                                            self.nomalBodyTemp = round(self.nomalBodyTemp*10)/10
+                                                            self.normalBodyTemp = round(self.normalBodyTemp*10)/10
                                                             
-                                                            self.isNomalBodyTempPicker.toggle()
+                                                            self.isNormalBodyTempPicker.toggle()
                                                         }) {
                                                             Text("Close")
                                                                 .fontWeight(.bold)
@@ -559,9 +559,9 @@ struct ProfileEditView: View {
                                 Button(action:{
                                     self.studentid = (self.studentidstr as NSString).integerValue
                                     self.schoolid = (self.schoolidstr as NSString).integerValue
-                                    firestore.updateUserData(uid: fireauth.uid, mail: fireauth.email!, firstname: self.firstname, lastname: self.lastname, gender: self.genderStr, schoolid: self.schoolid, studentid: self.studentid, grade: self.grade,  nomalbodytemp: self.nomalBodyTemp)
-                                    UserDefaults.standard.set(self.nomalBodyTemp, forKey: "nomalBodyTemp")
-                                    NotificationCenter.default.post(name: NSNotification.Name("nomalBodyTemp"), object: nil)
+                                    firestore.updateUserData(uid: fireauth.uid, mail: fireauth.email!, firstname: self.firstname, lastname: self.lastname, gender: self.genderStr, schoolid: self.schoolid, studentid: self.studentid, grade: self.grade,  normalbodytemp: self.normalBodyTemp)
+                                    UserDefaults.standard.set(self.normalBodyTemp, forKey: "normalBodyTemp")
+                                    NotificationCenter.default.post(name: NSNotification.Name("normalBodyTemp"), object: nil)
                                     self.isEditOn.toggle()
                                 }) {
                                     Text("保存")
@@ -579,12 +579,37 @@ struct ProfileEditView: View {
                             }
                         } else {
                             Group {
-                                Spacer(minLength: 50)
-                                    .fixedSize()
-                                Text("プロフィールはロックされています")
-                                    .foregroundColor(.red)
-                                    .fontWeight(.bold)
+
+                                Image(systemName: "lock.fill")
+                                    .font(.title)
                                     .padding()
+                                Text("パスワードで保護されています")
+                                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                    .padding()
+                                
+                                Button(action:{
+                                    self.security.biometricsAuth() { result in
+//                                        print(result)
+                                        if result {
+                                            self.isShowProfile = true
+                                            
+                                        } else {
+                                            self.isShowProfile = false
+                                           
+                                        }
+                                    }
+
+                                }) {
+                                    Text("解除")
+                                        .foregroundColor(.white)
+                                        .font(.title3)
+                                        .fontWeight(.bold)
+                                        .padding(.vertical)
+                                        .frame(width: UIScreen.main.bounds.width - 50, height: 40)
+                                        .background(Color.blue)
+                                        .cornerRadius(10)
+                                        .padding(.top, 25)
+                                }
                             }.frame(maxWidth: .infinity)
                         }
                         Spacer(minLength: 0)
@@ -598,13 +623,6 @@ struct ProfileEditView: View {
                 }.padding()
             }
             .onAppear() {
-                self.security.biometricsAuth() { result in
-                    if result {
-                        self.isShowProfile = true
-                    } else {
-                        self.isEditOn = false
-                    }
-                }
                 fireauth.getData() {_, _ in
                     
                 }
@@ -616,10 +634,10 @@ struct ProfileEditView: View {
                         self.studentidstr = String(self.firestore.userdata.studentid)
                         self.grade = self.firestore.userdata.grade
                         
-                        self.nomalBodyTemp = self.firestore.userdata.nomalbodytemp
-                        self.nomalBodyTempNum = Int(floor(self.nomalBodyTemp))
-                        self.nomalBodyTempPoint = Int((self.nomalBodyTemp - Float(self.nomalBodyTempNum))*10)
-                        self.nomalBodyTempNum = self.nomalBodyTempNum - 35
+                        self.normalBodyTemp = self.firestore.userdata.normalbodytemp
+                        self.normalBodyTempNum = Int(floor(self.normalBodyTemp))
+                        self.normalBodyTempPoint = Int((self.normalBodyTemp - Float(self.normalBodyTempNum))*10)
+                        self.normalBodyTempNum = self.normalBodyTempNum - 35
                         
                         self.genderStr = self.firestore.userdata.gender
                         if self.genderStr == "男性" {
@@ -634,6 +652,7 @@ struct ProfileEditView: View {
             }
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
         }
 }
 
@@ -645,6 +664,8 @@ struct ModalView: View {
                 .font(.title2)
                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                 .padding()
+            Divider()
+            Spacer(minLength: 0)
             Picker(selection: self.$grade, label: Text("")) {
                 Text("第1学年").tag(1)
                 Text("第2学年").tag(2)
@@ -652,36 +673,38 @@ struct ModalView: View {
                 Text("第4学年").tag(4)
                 Text("第5学年").tag(5)
                 Text("第6学年").tag(6)
-            }
+            }.pickerStyle(.wheel)
         }
     }
 }
 
 struct ModalTempView: View {
-    @Binding var nomalBodyTemp: Float
-    @Binding var nomalBodyTempNum: Int
-    @Binding var nomalBodyTempPoint: Int
+    @Binding var normalBodyTemp: Float
+    @Binding var normalBodyTempNum: Int
+    @Binding var normalBodyTempPoint: Int
     
     var body: some View {
         GeometryReader { geometry in
             HStack(spacing:0) {
-                Picker(selection: self.$nomalBodyTempNum, label: EmptyView()) {
+                Picker(selection: self.$normalBodyTempNum, label: EmptyView()) {
                     ForEach(35 ..< 41) {
                         Text("\($0)")
                     }
                 }.frame(maxWidth: geometry.size.width/2)
                     .clipped()
-                Picker(selection: self.$nomalBodyTempPoint, label: EmptyView()) {
+                    .pickerStyle(.wheel)
+                Picker(selection: self.$normalBodyTempPoint, label: EmptyView()) {
                     ForEach(0 ..< 10) {
                         Text("\($0)")
                     }
                 }.frame(maxWidth: geometry.size.width/2)
                     .clipped()
+                    .pickerStyle(.wheel)
             }
         }.onAppear() {
-            self.nomalBodyTempNum = Int(floor(self.nomalBodyTemp))
-            self.nomalBodyTempPoint = Int((self.nomalBodyTemp - Float(self.nomalBodyTempNum))*10)
-            self.nomalBodyTempNum = self.nomalBodyTempNum - 35
+            self.normalBodyTempNum = Int(floor(self.normalBodyTemp))
+            self.normalBodyTempPoint = Int((self.normalBodyTemp - Float(self.normalBodyTempNum))*10)
+            self.normalBodyTempNum = self.normalBodyTempNum - 35
         }
     }
 }

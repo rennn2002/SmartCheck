@@ -10,13 +10,15 @@ import SwiftUI
 struct MainView: View {
     @State var isFormPosted:Bool = UserDefaults.standard.value(forKey: "isFormPosted") as? Bool ?? false
     
+    @State var isResend: Bool = false
+    
     var body: some View {
         NavigationView {
             VStack {
                 if self.isFormPosted {
-                    CheckFormView()
+                    CheckFormView(isResend: self.$isResend)
                 } else {
-                    FormView()
+                    FormView(isResend: self.$isResend)
                 }
             }
         }

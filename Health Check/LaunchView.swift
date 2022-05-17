@@ -23,11 +23,13 @@ struct LaunchView: View {
     let backGroundColor = Color(red: 96/255, green: 123/255, blue: 184/255)
     
     var body: some View {
+        NavigationView {
             ZStack {
                 backGroundColor.edgesIgnoringSafeArea(.all)
                 VStack {
                     if self.isLoggedin {
                         HomeView()
+                            
                     } else if self.isWaitingShow {
                         WaitingView()
                     } else if self.isSignedup {
@@ -63,8 +65,9 @@ struct LaunchView: View {
                                 .background(Color(red: 119/255, green: 140/255, blue: 236/255))
                                 .cornerRadius(50)
                                 .padding(.top, 25)
+                              
                         }
-                        
+    
                         NavigationLink(destination: LoginView(showLogin: self.$showLogin), isActive: self.$showLogin)  {
                             Text("ログイン")
                                 .foregroundColor(.white)
@@ -75,7 +78,9 @@ struct LaunchView: View {
                                 .background(Color(red: 62/255, green: 74/255, blue: 141/255))
                                 .cornerRadius(50)
                                 .padding(.top, 25)
-                            
+                                .onTapGesture {
+                                    self.showLogin.toggle()
+                                }
                         }
                         
                         Button(action:{
@@ -110,13 +115,13 @@ struct LaunchView: View {
                                         let ref = db.collection("users").document(user.uid)
                                         ref.getDocument { (document, error) in
                                             if let document = document, document.exists {
-                                                print("exist")
+//                                                print("exist")
                                                 UserDefaults.standard.set(false, forKey: "isWaitingShow")
                                                 NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)
                                                 UserDefaults.standard.set(true, forKey: "isLoggedin")
                                                 NotificationCenter.default.post(name: NSNotification.Name("isLoggedin"), object: nil)
                                             } else {
-                                                print("new")
+//                                                print("new")
                                                 UserDefaults.standard.set(false, forKey: "isWaitingShow")
                                                 NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)
                                                 UserDefaults.standard.set(true, forKey: "isSignedup")
@@ -149,7 +154,12 @@ struct LaunchView: View {
                         Spacer(minLength:30)
                     }
                 }
-            }
+            }.navigationBarHidden(true)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+        }.navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             UIApplication.shared.applicationIconBadgeNumber = 0 
             NotificationCenter.default.addObserver(forName: NSNotification.Name("isLoggedin"), object: nil, queue: .main) { (_) in

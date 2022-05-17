@@ -7,9 +7,10 @@
 
 import SwiftUI
 import GoogleSignIn
+import Foundation
 
 struct FormView: View {
-    @State var bodyTemp: Float = UserDefaults.standard.object(forKey: "nomalBodyTemp") as? Float ?? 36.5
+    @State var bodyTemp: Float = UserDefaults.standard.object(forKey: "normalBodyTemp") as? Float ?? 36.5
     @State var bodyTempNum: Int = 0
     @State var bodyTempPoint: Int = 0
     @State var isPickerShow: Bool = false
@@ -30,6 +31,15 @@ struct FormView: View {
     @State var schoolid: Int = 0
     @State var studentid: Int = 0
     
+    @State var postTime: String = "not provided"
+    @State var currentTime: String = "not provided"
+    @State var postDay: Date = Date()
+    
+    @State var currentDay: String = ""
+    @State var postDate: String = ""
+    
+    @Binding var isResend: Bool
+    
     var fireauth: FireAuth = FireAuth()
     @ObservedObject var firestore: FireStore = FireStore()
     
@@ -37,7 +47,7 @@ struct FormView: View {
         NavigationView {
             VStack {
                 if self.isFormPosted {
-                    CheckFormView()
+                    CheckFormView(isResend: self.$isResend)
                 } else {
                     ZStack() {
                         GeometryReader { geometry in
@@ -159,7 +169,7 @@ struct FormView: View {
                                                             //after submission complete
                                                             self.isLoading = false
                                                             
-                                                            print(self.bodyTemp)
+//                                                            print(self.bodyTemp)
                                                             UserDefaults.standard.set(true, forKey: "isFormPosted")
                                                             NotificationCenter.default.post(name: NSNotification.Name("isFormPosted"), object: nil)
                                                         } else {
@@ -169,7 +179,7 @@ struct FormView: View {
                                                         }
                                                     }
                                                 } else {
-                                                    print("still waiting to obtain studentID and schoolID from the firestore")
+//                                                    print("still waiting to obtain studentID and schoolID from the firestore")
                                                 }
                                             })
                                         }) {
@@ -200,25 +210,98 @@ struct FormView: View {
                 }
             }
             .onAppear() {
-                fireauth.getData() {_, _ in
-                    //obtain userdata from  fireauth
+                if self.isResend {
+                    fireauth.getData() {_, _ in
+                        //obtain userdata from  fireauth
+                    }
+                    firestore.getUserData(uid: fireauth.uid, completion: {result in
+                        self.firstname = self.firestore.userdata.firstname
+                        self.lastname = self.firestore.userdata.lastname
+                        self.schoolid = self.firestore.userdata.schoolid
+                        self.studentid = self.firestore.userdata.studentid
+                    })
+                    
+                    NotificationCenter.default.addObserver(forName: NSNotification.Name("normalBodyTemp"), object: nil, queue: .main) { (_) in
+                        self.bodyTemp = UserDefaults.standard.value(forKey: "normalBodyTemp") as? Float ?? 36.5
+                    }
+                    
+                    self.bodyTempNum = Int(floor(self.bodyTemp))
+                    self.bodyTemp = round(self.bodyTemp*10)/10
+                    self.bodyTempPoint = Int((round((self.bodyTemp - Float(self.bodyTempNum))*10)/10)*10)
+                    self.bodyTempNum = self.bodyTempNum - 35
+                    
+                } else {
+                    fireauth.getData() {_, _ in
+                        //obtain userdata from  fireauth
+                    }
+                    firestore.getUserData(uid: fireauth.uid, completion: {result in
+                        self.firstname = self.firestore.userdata.firstname
+                        self.lastname = self.firestore.userdata.lastname
+                        self.schoolid = self.firestore.userdata.schoolid
+                        self.studentid = self.firestore.userdata.studentid
+                    })
+                    
+                    firestore.getForm(uid: fireauth.uid) { result in
+                        if result {
+                            self.isLoading = false
+                            self.bodyTemp = firestore.tempdata.bodytemp
+                            self.symptom = firestore.tempdata.symptom
+                            
+                            //convert timestamp to date
+                            let date: Date = firestore.tempdata.posttime.dateValue()
+                            
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.locale = Locale(identifier: "ja_JP")
+                            dateFormatter.dateStyle = .medium
+                            dateFormatter.dateFormat = "yyyy/MM/d HH:mm"
+                            
+                            self.postTime = dateFormatter.string(from: date)
+                            
+                            dateFormatter.locale = Locale(identifier: "ja_JP")
+                            dateFormatter.dateStyle = .medium
+                            dateFormatter.dateFormat = "d"
+                            self.postDate = dateFormatter.string(from: date)
+                            
+                            //obtain current time
+                            let dt = Date()
+                            dateFormatter.locale = Locale(identifier: "ja_JP")
+                            dateFormatter.dateStyle = .medium
+                            dateFormatter.dateFormat = "yyyy/MM/d HH:mm"
+                            
+                            self.currentTime = dateFormatter.string(from: dt)
+                            dateFormatter.locale = Locale(identifier: "ja_JP")
+                            dateFormatter.dateStyle = .medium
+                            dateFormatter.dateFormat = "d"
+                            self.currentDay = dateFormatter.string(from: dt)
+                            
+                            
+                            //compare current time and post time
+                            if self.postDate != self.currentDay {
+                                UserDefaults.standard.set(false, forKey: "isFormPosted")
+                                NotificationCenter.default.post(name: NSNotification.Name("isFormPosted"), object: nil)
+                            } else {
+                                UserDefaults.standard.set(true, forKey: "isFormPosted")
+                                NotificationCenter.default.post(name: NSNotification.Name("isFormPosted"), object: nil)
+                                
+                                UIApplication.shared.applicationIconBadgeNumber = 0
+                            }
+                        } else {
+                            self.isLoading = true
+                        }
+                    }
+                    
+                    
+                    NotificationCenter.default.addObserver(forName: NSNotification.Name("normalBodyTemp"), object: nil, queue: .main) { (_) in
+                        self.bodyTemp = UserDefaults.standard.value(forKey: "normalBodyTemp") as? Float ?? 36.5
+                    }
+                    NotificationCenter.default.addObserver(forName: NSNotification.Name("isFormPosted"), object: nil, queue: .main) { (_) in
+                        self.isFormPosted = UserDefaults.standard.value(forKey:"isFormPosted") as? Bool ?? false
+                    }
+                    self.bodyTempNum = Int(floor(self.bodyTemp))
+                    self.bodyTemp = round(self.bodyTemp*10)/10
+                    self.bodyTempPoint = Int((round((self.bodyTemp - Float(self.bodyTempNum))*10)/10)*10)
+                    self.bodyTempNum = self.bodyTempNum - 35
                 }
-                firestore.getUserData(uid: fireauth.uid, completion: {result in
-                    self.firstname = self.firestore.userdata.firstname
-                    self.lastname = self.firestore.userdata.lastname
-                    self.schoolid = self.firestore.userdata.schoolid
-                    self.studentid = self.firestore.userdata.studentid
-                })
-                NotificationCenter.default.addObserver(forName: NSNotification.Name("nomalBodyTemp"), object: nil, queue: .main) { (_) in
-                    self.bodyTemp = UserDefaults.standard.value(forKey: "nomalBodyTemp") as? Float ?? 36.5
-                }
-                NotificationCenter.default.addObserver(forName: NSNotification.Name("isFormPosted"), object: nil, queue: .main) { (_) in
-                    self.isFormPosted = UserDefaults.standard.value(forKey:"isFormPosted") as? Bool ?? false
-                }
-                self.bodyTempNum = Int(floor(self.bodyTemp))
-                self.bodyTemp = round(self.bodyTemp*10)/10
-                self.bodyTempPoint = Int((round((self.bodyTemp - Float(self.bodyTempNum))*10)/10)*10)
-                self.bodyTempNum = self.bodyTempNum - 35
             }
         }
         .navigationBarHidden(true)

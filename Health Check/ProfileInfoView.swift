@@ -17,7 +17,7 @@ struct ProfileInfoView: View {
     @State var studentid: Int = 0
     @State var schoolid: Int = 0
     @State var grade: Int = 1
-    @State var nomalBodyTemp: Float = 36.5
+    @State var normalBodyTemp: Float = 36.5
     @State var genderStr: String = "男性"
     
     @State var isProfileShow: Bool = false
@@ -42,7 +42,7 @@ struct ProfileInfoView: View {
                                 Text(firestore.userdata.mail)
                             }
                             Section(header:Text("平熱")) {
-                                Text(String(self.nomalBodyTemp))
+                                Text(String(self.normalBodyTemp))
                             }
                             Section(header:Text("性別")) {
                                 Text(self.genderStr)
@@ -85,10 +85,15 @@ struct ProfileInfoView: View {
                             }
                         }
                     }) {
-                        Text("表示")
+                        Text("解除")
+                            .foregroundColor(.white)
                             .font(.title3)
                             .fontWeight(.bold)
-                            .foregroundColor(.blue)
+                            .padding(.vertical)
+                            .frame(width: UIScreen.main.bounds.width - 50, height: 40)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                            .padding(.top, 25)
                     }.padding()
                 }
                 Spacer(minLength: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/)
@@ -107,7 +112,7 @@ struct ProfileInfoView: View {
             firestore.getUserData(uid: fireauth.uid) { result in
                 self.firstname = self.firestore.userdata.firstname
                 self.lastname = self.firestore.userdata.lastname
-                self.nomalBodyTemp = self.firestore.userdata.nomalbodytemp
+                self.normalBodyTemp = self.firestore.userdata.normalbodytemp
                 self.genderStr = self.firestore.userdata.gender
                 self.schoolid = self.firestore.userdata.schoolid
                 self.studentid = self.firestore.userdata.studentid

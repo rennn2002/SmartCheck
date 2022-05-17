@@ -20,17 +20,29 @@ struct HomeView: View {
                 Image(systemName: "square.and.pencil")
                 Text("フォーム")
             }.tag(1)
+                .navigationBarHidden(true)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
             
             ProfileInfoView().tabItem {
                 Image(systemName: "person.fill")
                 Text("データ")
             }.tag(2)
+                .navigationBarHidden(true)
+                    .navigationBarBackButtonHidden(true)
+                    .navigationBarTitleDisplayMode(.inline)
             
             SettingView().tabItem {
                 Image(systemName:"gear")
                 Text("設定")
             }.tag(3)
-        }
+                .navigationBarHidden(true)
+                    .navigationBarBackButtonHidden(true)
+                    .navigationBarTitleDisplayMode(.inline)
+        }.navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -46,7 +58,7 @@ struct DetailView: View {
     @State var studentid: Int = 0
     @State var schoolid: Int = 0
     @State var grade: Int = 1
-    @State var nomalBodyTemp: Float = 36.5
+    @State var normalBodyTemp: Float = 36.5
     @State var genderStr: String = "男性"
     
     @State var isProfileShow: Bool = false
@@ -97,7 +109,7 @@ struct DetailView: View {
                                 .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                             Spacer(minLength: 10)
                                 .fixedSize()
-                            Text(String(self.nomalBodyTemp))
+                            Text(String(self.normalBodyTemp))
                                 .font(.title3)
                             Spacer(minLength: 20)
                                 .fixedSize()
@@ -177,7 +189,7 @@ struct DetailView: View {
             firestore.getUserData(uid: fireauth.uid) { result in
                 self.firstname = self.firestore.userdata.firstname
                 self.lastname = self.firestore.userdata.lastname
-                self.nomalBodyTemp = self.firestore.userdata.nomalbodytemp
+                self.normalBodyTemp = self.firestore.userdata.normalbodytemp
                 self.genderStr = self.firestore.userdata.gender
                 self.schoolid = self.firestore.userdata.schoolid
                 self.studentid = self.firestore.userdata.studentid

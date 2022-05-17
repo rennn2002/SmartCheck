@@ -62,7 +62,7 @@ struct GuidanceView: View {
                 Button(action:{
                     UNUserNotificationCenter.current()
                         .requestAuthorization(options: [.alert, .sound, .badge]) { (granted, _) in
-                            print("Permission granted: \(granted)")
+//                            print("Permission granted: \(granted)")
                         }
                     UserDefaults.standard.set(true, forKey: "isNotificationOn")
                     NotificationCenter.default.post(name: NSNotification.Name("isNotificationOn"), object: nil)

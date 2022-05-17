@@ -21,6 +21,8 @@ struct CheckFormView: View {
     
     @State var showingAlert: Bool = false
     
+    @Binding var isResend: Bool
+    
     var fireauth: FireAuth = FireAuth()
     @ObservedObject var firestore: FireStore = FireStore()
     
@@ -85,6 +87,7 @@ struct CheckFormView: View {
                                       message: Text("提出フォームを再開しますか？"),
                                       primaryButton: .cancel(Text("キャンセル")),
                                       secondaryButton: .destructive(Text("再開"), action: {
+                                    self.isResend = true
                                     UserDefaults.standard.set(false, forKey: "isFormPosted")
                                     NotificationCenter.default.post(name: NSNotification.Name("isFormPosted"), object: nil)
                                 })
@@ -155,8 +158,8 @@ struct CheckFormView: View {
     }
 }
 
-struct CheckFormView_Previews: PreviewProvider {
-    static var previews: some View {
-        CheckFormView()
-    }
-}
+//struct CheckFormView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CheckFormView()
+//    }
+//}

@@ -78,8 +78,8 @@ struct SettingView: View {
                                 self.notificationTimeHour = Int(dateFormatter.string(from: newValue))!
                                 dateFormatter.dateFormat = "m"
                                 self.notificationTimeMinute = Int(dateFormatter.string(from: newValue))!
-                                print(String(self.notificationTimeHour))
-                                print(String(self.notificationTimeMinute))
+//                                print(String(self.notificationTimeHour))
+//                                print(String(self.notificationTimeMinute))
                                 UserDefaults.standard.set(self.notificationTimeHour, forKey: "notificationTimeHour")
                                 NotificationCenter.default.post(name: NSNotification.Name("notificationTimeHour"), object: nil)
                                 UserDefaults.standard.set(self.notificationTimeMinute, forKey: "notificationTimeMinute")
@@ -94,6 +94,7 @@ struct SettingView: View {
                             
                         }.navigationBarHidden(true)
                             .navigationBarBackButtonHidden(true)
+                            .navigationBarTitleDisplayMode(.inline)
                         
                         Button(action:{
                             self.showingAlert = true
@@ -144,7 +145,6 @@ struct SettingView: View {
         }
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
-            .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
