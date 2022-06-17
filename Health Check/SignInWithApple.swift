@@ -85,6 +85,8 @@ extension SignInWithAppleObject: ASAuthorizationControllerDelegate {
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         // Sign in With Firebase app
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            
+            print(String(describing: appleIDCredential.fullName?.givenName))
             guard let nonce = currentNonce else {
                 print("Invalid state: A login callback was received, but no login request was sent.")
                 return
@@ -120,6 +122,12 @@ extension SignInWithAppleObject: ASAuthorizationControllerDelegate {
                             UserDefaults.standard.set(true, forKey: "isLoggedin")
                             NotificationCenter.default.post(name: NSNotification.Name("isLoggedin"), object: nil)
                         } else {
+                            db.collection("users").document(user.uid).setData(["firstname":String(describing: appleIDCredential.fullName!.familyName!), "lastname":String(describing: appleIDCredential.fullName!.givenName!)]) { error in
+                                if let error = error {
+                                    print(error)
+                                    return
+                                }
+                            }
                             //                                                print("new")
                             UserDefaults.standard.set(false, forKey: "isWaitingShow")
                             NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)

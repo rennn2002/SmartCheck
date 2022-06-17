@@ -34,6 +34,7 @@ struct ProfileInitView: View {
     @State var buttonColor: Color = Color.green
     
     var genderOptions = ["🙍‍♂️ 男性", "🙍‍♀️ 女性", "その他"]
+    var db = Firestore.firestore()
     
     func convertGender(gender:Int) -> (String) {
         
@@ -297,72 +298,78 @@ struct ProfileInitView: View {
                                 fireauth.getData() {_, _ in
                                     
                                 }
+                                db.collection("users").document(fireauth.uid).getDocument { snapshot, error in
+                                    guard let data = snapshot?.data() else { return }
+                                    
+                                    self.firstname = data["firstname"] as! String
+                                    self.lastname = data["lastname"] as! String
+                                }
                             }
+                        }
                     }
+                    .navigationBarHidden(true)
+                    .navigationBarBackButtonHidden(true)
                 }
-                .navigationBarHidden(true)
-                .navigationBarBackButtonHidden(true)
+                
+                if self.alert {
+                    ErrorView(alert: self.$alert, error: self.$error, buttonColor: self.$buttonColor)
+                }
             }
+        }
+    }
+    
+    struct ProfileEditView: View {
+        
+        var fireauth: FireAuth = FireAuth()
+        @ObservedObject var firestore: FireStore = FireStore()
+        var security: Security = Security()
+        
+        @State var firstname: String = ""
+        @State var lastname: String = ""
+        @State var studentidstr: String = ""
+        @State var schoolidstr: String = ""
+        @State var studentid: Int = 0
+        @State var schoolid: Int = 0
+        @State var grade: Int = 1
+        @State var normalBodyTemp: Float = 36.5
+        @State var normalBodyTempNum: Int = 0
+        @State var normalBodyTempPoint: Int = 0
+        @State var normalBodyTempPointFloat: Float = 0.0
+        
+        @State var gender: Int = 0
+        @State var genderStr: String = "男性"
+        
+        @State var showPicker: Bool = false
+        
+        @State var isNormalBodyTempPicker: Bool = false
+        
+        @Binding var isEditOn: Bool
+        
+        @State var isShowProfile: Bool = false
+        var genderOptions = ["🙍‍♂️ 男性", "🙍‍♀️ 女性", "その他"]
+        
+        func convertGender(gender:Int) -> (String) {
             
-            if self.alert {
-                ErrorView(alert: self.$alert, error: self.$error, buttonColor: self.$buttonColor)
+            var genderConverted:String = ""
+            
+            if gender == 0 {
+                genderConverted = "male"
+            } else if gender == 1 {
+                genderConverted = "female"
+            } else {
+                genderConverted = "other"
             }
+            return genderConverted
         }
-    }
-}
-
-struct ProfileEditView: View {
-    
-    var fireauth: FireAuth = FireAuth()
-    @ObservedObject var firestore: FireStore = FireStore()
-    var security: Security = Security()
-    
-    @State var firstname: String = ""
-    @State var lastname: String = ""
-    @State var studentidstr: String = ""
-    @State var schoolidstr: String = ""
-    @State var studentid: Int = 0
-    @State var schoolid: Int = 0
-    @State var grade: Int = 1
-    @State var normalBodyTemp: Float = 36.5
-    @State var normalBodyTempNum: Int = 0
-    @State var normalBodyTempPoint: Int = 0
-    @State var normalBodyTempPointFloat: Float = 0.0
-    
-    @State var gender: Int = 0
-    @State var genderStr: String = "男性"
-    
-    @State var showPicker: Bool = false
-    
-    @State var isNormalBodyTempPicker: Bool = false
-    
-    @Binding var isEditOn: Bool
-    
-    @State var isShowProfile: Bool = false
-    var genderOptions = ["🙍‍♂️ 男性", "🙍‍♀️ 女性", "その他"]
-    
-    func convertGender(gender:Int) -> (String) {
         
-        var genderConverted:String = ""
-        
-        if gender == 0 {
-            genderConverted = "male"
-        } else if gender == 1 {
-            genderConverted = "female"
-        } else {
-            genderConverted = "other"
-        }
-        return genderConverted
-    }
-    
-    var body: some View {
+        var body: some View {
             ZStack(alignment: .topLeading) {
                 VStack {
                     Text("プロフィール設定")
                         .font(.title)
                         .fontWeight(.bold)
                         .padding()
-                   
+                    
                     Divider()
                     
                     Spacer(minLength: 20)
@@ -579,7 +586,7 @@ struct ProfileEditView: View {
                             }
                         } else {
                             Group {
-
+                                
                                 Image(systemName: "lock.fill")
                                     .font(.title)
                                     .padding()
@@ -589,16 +596,16 @@ struct ProfileEditView: View {
                                 
                                 Button(action:{
                                     self.security.biometricsAuth() { result in
-//                                        print(result)
+                                        //                                        print(result)
                                         if result {
                                             self.isShowProfile = true
                                             
                                         } else {
                                             self.isShowProfile = false
-                                           
+                                            
                                         }
                                     }
-
+                                    
                                 }) {
                                     Text("解除")
                                         .foregroundColor(.white)
@@ -654,58 +661,58 @@ struct ProfileEditView: View {
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
         }
-}
-
-struct ModalView: View {
-    @Binding var grade: Int
-    var body: some View {
-        VStack {
-            Text("第\(self.grade)学年")
-                .font(.title2)
-                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                .padding()
-            Divider()
-            Spacer(minLength: 0)
-            Picker(selection: self.$grade, label: Text("")) {
-                Text("第1学年").tag(1)
-                Text("第2学年").tag(2)
-                Text("第3学年").tag(3)
-                Text("第4学年").tag(4)
-                Text("第5学年").tag(5)
-                Text("第6学年").tag(6)
-            }.pickerStyle(.wheel)
-        }
     }
-}
-
-struct ModalTempView: View {
-    @Binding var normalBodyTemp: Float
-    @Binding var normalBodyTempNum: Int
-    @Binding var normalBodyTempPoint: Int
     
-    var body: some View {
-        GeometryReader { geometry in
-            HStack(spacing:0) {
-                Picker(selection: self.$normalBodyTempNum, label: EmptyView()) {
-                    ForEach(35 ..< 41) {
-                        Text("\($0)")
-                    }
-                }.frame(maxWidth: geometry.size.width/2)
-                    .clipped()
-                    .pickerStyle(.wheel)
-                Picker(selection: self.$normalBodyTempPoint, label: EmptyView()) {
-                    ForEach(0 ..< 10) {
-                        Text("\($0)")
-                    }
-                }.frame(maxWidth: geometry.size.width/2)
-                    .clipped()
-                    .pickerStyle(.wheel)
+    struct ModalView: View {
+        @Binding var grade: Int
+        var body: some View {
+            VStack {
+                Text("第\(self.grade)学年")
+                    .font(.title2)
+                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                    .padding()
+                Divider()
+                Spacer(minLength: 0)
+                Picker(selection: self.$grade, label: Text("")) {
+                    Text("第1学年").tag(1)
+                    Text("第2学年").tag(2)
+                    Text("第3学年").tag(3)
+                    Text("第4学年").tag(4)
+                    Text("第5学年").tag(5)
+                    Text("第6学年").tag(6)
+                }.pickerStyle(.wheel)
             }
-        }.onAppear() {
-            self.normalBodyTempNum = Int(floor(self.normalBodyTemp))
-            self.normalBodyTempPoint = Int((self.normalBodyTemp - Float(self.normalBodyTempNum))*10)
-            self.normalBodyTempNum = self.normalBodyTempNum - 35
         }
     }
-}
-
+    
+    struct ModalTempView: View {
+        @Binding var normalBodyTemp: Float
+        @Binding var normalBodyTempNum: Int
+        @Binding var normalBodyTempPoint: Int
+        
+        var body: some View {
+            GeometryReader { geometry in
+                HStack(spacing:0) {
+                    Picker(selection: self.$normalBodyTempNum, label: EmptyView()) {
+                        ForEach(35 ..< 41) {
+                            Text("\($0)")
+                        }
+                    }.frame(maxWidth: geometry.size.width/2)
+                        .clipped()
+                        .pickerStyle(.wheel)
+                    Picker(selection: self.$normalBodyTempPoint, label: EmptyView()) {
+                        ForEach(0 ..< 10) {
+                            Text("\($0)")
+                        }
+                    }.frame(maxWidth: geometry.size.width/2)
+                        .clipped()
+                        .pickerStyle(.wheel)
+                }
+            }.onAppear() {
+                self.normalBodyTempNum = Int(floor(self.normalBodyTemp))
+                self.normalBodyTempPoint = Int((self.normalBodyTemp - Float(self.normalBodyTempNum))*10)
+                self.normalBodyTempNum = self.normalBodyTempNum - 35
+            }
+        }
+    }
+    
