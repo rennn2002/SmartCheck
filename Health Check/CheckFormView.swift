@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CheckFormView: View {
-    @State var bodyTemp: Float = 0.0
+    @State var bodyTemp: Double = 0.0
     @State var symptom: Bool = false
     @State var postTime: String = "not provided"
     @State var currentTime: String = "not provided"
@@ -48,7 +48,8 @@ struct CheckFormView: View {
                         Text("体温：")
                             .fontWeight(.bold)
                             .font(.title3)
-                        Text(String(firestore.tempdata.bodytemp))
+                        
+                        Text(String(round(firestore.tempdata.bodytemp * 10.0) / 10.0))
                             .fontWeight(.bold)
                             .font(.title3)
                     }.padding(2.5)

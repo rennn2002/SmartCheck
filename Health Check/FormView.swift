@@ -10,7 +10,7 @@ import GoogleSignIn
 import Foundation
 
 struct FormView: View {
-    @State var bodyTemp: Float = UserDefaults.standard.object(forKey: "normalBodyTemp") as? Float ?? 36.5
+    @State var bodyTemp: Double = UserDefaults.standard.object(forKey: "normalBodyTemp") as? Double ?? 36.5
     @State var bodyTempNum: Int = 0
     @State var bodyTempPoint: Int = 0
     @State var isPickerShow: Bool = false
@@ -162,9 +162,9 @@ struct FormView: View {
                                                     let dateFormatter = DateFormatter()
                                                     dateFormatter.dateFormat = DateFormatter.dateFormat(fromTemplate: "yMMMdHm", options: 0, locale: Locale(identifier: "ja_JP"))
                                                     // convert bodytemp from 2 integers to float value
-                                                    self.bodyTemp = Float(self.bodyTempNum + 35)+(Float(self.bodyTempPoint)/10)
+                                                    self.bodyTemp = Double(Float(self.bodyTempNum + 35)+(Float(self.bodyTempPoint)/10))
                                                     UIApplication.shared.applicationIconBadgeNumber = 0
-                                                    firestore.postForm(uid: fireauth.uid, firstname: self.firstname, lastname: self.lastname, schoolid: self.schoolid, studentid: self.studentid, bodytemp: self.bodyTemp, symptom: self.symptom, posttime: dt, mail: self.fireauth.email!) { result, error in
+                                                    firestore.postForm(uid: fireauth.uid, firstname: self.firstname, lastname: self.lastname, schoolid: self.schoolid, studentid: self.studentid, bodytemp: Float(self.bodyTemp), symptom: self.symptom, posttime: dt, mail: self.fireauth.email!) { result, error in
                                                         if result {
                                                             //after submission complete
                                                             self.isLoading = false
@@ -222,12 +222,12 @@ struct FormView: View {
                     })
                     
                     NotificationCenter.default.addObserver(forName: NSNotification.Name("normalBodyTemp"), object: nil, queue: .main) { (_) in
-                        self.bodyTemp = UserDefaults.standard.value(forKey: "normalBodyTemp") as? Float ?? 36.5
+                        self.bodyTemp = Double(UserDefaults.standard.value(forKey: "normalBodyTemp") as? Double ?? 36.5)
                     }
                     
                     self.bodyTempNum = Int(floor(self.bodyTemp))
                     self.bodyTemp = round(self.bodyTemp*10)/10
-                    self.bodyTempPoint = Int((round((self.bodyTemp - Float(self.bodyTempNum))*10)/10)*10)
+                    self.bodyTempPoint = Int((round((self.bodyTemp - Double(self.bodyTempNum))*10)/10)*10)
                     self.bodyTempNum = self.bodyTempNum - 35
                     
                 } else {
@@ -292,14 +292,14 @@ struct FormView: View {
                     
                     
                     NotificationCenter.default.addObserver(forName: NSNotification.Name("normalBodyTemp"), object: nil, queue: .main) { (_) in
-                        self.bodyTemp = UserDefaults.standard.value(forKey: "normalBodyTemp") as? Float ?? 36.5
+                        self.bodyTemp = Double(UserDefaults.standard.value(forKey: "normalBodyTemp") as? Double ?? 36.5)
                     }
                     NotificationCenter.default.addObserver(forName: NSNotification.Name("isFormPosted"), object: nil, queue: .main) { (_) in
                         self.isFormPosted = UserDefaults.standard.value(forKey:"isFormPosted") as? Bool ?? false
                     }
                     self.bodyTempNum = Int(floor(self.bodyTemp))
                     self.bodyTemp = round(self.bodyTemp*10)/10
-                    self.bodyTempPoint = Int((round((self.bodyTemp - Float(self.bodyTempNum))*10)/10)*10)
+                    self.bodyTempPoint = Int((round((self.bodyTemp - Double(self.bodyTempNum))*10)/10)*10)
                     self.bodyTempNum = self.bodyTempNum - 35
                 }
             }

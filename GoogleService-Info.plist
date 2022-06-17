@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>139663324564-bft2babt28c1a7jj50uju0i4shjuptmv.apps.googleusercontent.com</string>
+	<string>62891179128-ltgf3vo4v9ug6o40lqhc46hiaobg77er.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.139663324564-bft2babt28c1a7jj50uju0i4shjuptmv</string>
+	<string>com.googleusercontent.apps.62891179128-ltgf3vo4v9ug6o40lqhc46hiaobg77er</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>62891179128-4f1toiaqr3cv42mduu3fari11gg4fv9v.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyB5iryrthNevAzdQzhZv9jZuIhIR9I6orU</string>
+	<string>AIzaSyAuHTCuRC5txhgw_71HE_kj_I1hvMo5Vtg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>139663324564</string>
+	<string>62891179128</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>pleap.Health-Check</string>
 	<key>PROJECT_ID</key>
-	<string>health-check-test-269b1</string>
+	<string>health-check-db5ee</string>
 	<key>STORAGE_BUCKET</key>
-	<string>health-check-test-269b1.appspot.com</string>
+	<string>health-check-db5ee.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:139663324564:ios:9ed90883e1c0d921038b81</string>
+	<string>1:62891179128:ios:e4fdca6fe43ba0c415018d</string>
 </dict>
 </plist>

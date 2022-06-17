@@ -114,7 +114,7 @@ class FireStore: ObservableObject {
             completion(false)
             db.collection("data").document(uid).getDocument { snapshot, error in
                 guard let data = snapshot?.data() else { return }
-                self.tempdata.bodytemp = data["bodytemp"] as! Float
+                self.tempdata.bodytemp = data["bodytemp"] as! Double
                 self.tempdata.symptom = data["symptom"] as! Bool
                 self.tempdata.posttime = data["posttime"] as! Timestamp
                 group.leave()
@@ -146,7 +146,7 @@ class FireStore: ObservableObject {
                 completion(true)
             }
         }
-        
+
     func initUserData(uid:String, mail:String, firstname: String, lastname: String, gender:String, schoolid: Int, studentid: Int, grade: Int, normalbodytemp: Float, res: @escaping(Bool, String)->()) {
             db.collection("users").document(uid).setData(["uid":uid, "mail":mail, "firstname":firstname, "lastname":lastname, "gender":gender, "schoolid":schoolid, "studentid":studentid, "grade": grade, "normalbodytemp": normalbodytemp]) { error in
                 if let error = error {

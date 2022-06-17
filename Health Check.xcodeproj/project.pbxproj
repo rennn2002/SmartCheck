@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		06CEE3480F1B83685C597062 /* Pods_Health_Check_Health_CheckUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 966E85024C6C29BCE2599331 /* Pods_Health_Check_Health_CheckUITests.framework */; };
 		4D2BD5229A731F784D2E4A5A /* Pods_Health_Check.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A72A7638E47E3539D3D8028 /* Pods_Health_Check.framework */; };
+		BC08844F285BE00C0061C4CB /* SignInWithApple.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC08844E285BE00C0061C4CB /* SignInWithApple.swift */; };
+		BC088450285BE00C0061C4CB /* SignInWithApple.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC08844E285BE00C0061C4CB /* SignInWithApple.swift */; };
+		BC088451285BE00C0061C4CB /* SignInWithApple.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC08844E285BE00C0061C4CB /* SignInWithApple.swift */; };
 		BC18716B270BC373002DA886 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC18716A270BC373002DA886 /* ListView.swift */; };
 		BC18716C270BC373002DA886 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC18716A270BC373002DA886 /* ListView.swift */; };
 		BC18716D270BC373002DA886 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC18716A270BC373002DA886 /* ListView.swift */; };
@@ -103,6 +106,8 @@
 		966E85024C6C29BCE2599331 /* Pods_Health_Check_Health_CheckUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Health_Check_Health_CheckUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A72A7638E47E3539D3D8028 /* Pods_Health_Check.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Health_Check.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4A4CBDEFC89AF9B5FE87940 /* Pods_Health_CheckTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Health_CheckTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BC08844D285B53A60061C4CB /* Health Check.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Health Check.entitlements"; sourceTree = "<group>"; };
+		BC08844E285BE00C0061C4CB /* SignInWithApple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithApple.swift; sourceTree = "<group>"; };
 		BC18716A270BC373002DA886 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		BC187176270D5E3E002DA886 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		BC1C946327046CBA00D3B6BE /* GoogleSignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignIn.swift; sourceTree = "<group>"; };
@@ -122,7 +127,7 @@
 		BCB92D0C270E94FC00DC3C0C /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		BCB92D10270EED5A00DC3C0C /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		BCB92D14270F12C600DC3C0C /* GuidanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuidanceView.swift; sourceTree = "<group>"; };
-		BCDA033B270269CB00D44D51 /* Health Check.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Health Check.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BCDA033B270269CB00D44D51 /* SmartCheck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartCheck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCDA033E270269CB00D44D51 /* Health_CheckApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Health_CheckApp.swift; sourceTree = "<group>"; };
 		BCDA0340270269CB00D44D51 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		BCDA0342270269CD00D44D51 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -205,7 +210,7 @@
 		BCDA033C270269CB00D44D51 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BCDA033B270269CB00D44D51 /* Health Check.app */,
+				BCDA033B270269CB00D44D51 /* SmartCheck.app */,
 				BCDA034C270269CD00D44D51 /* Health CheckTests.xctest */,
 				BCDA0357270269CD00D44D51 /* Health CheckUITests.xctest */,
 			);
@@ -215,12 +220,14 @@
 		BCDA033D270269CB00D44D51 /* Health Check */ = {
 			isa = PBXGroup;
 			children = (
+				BC08844D285B53A60061C4CB /* Health Check.entitlements */,
 				BCDA033E270269CB00D44D51 /* Health_CheckApp.swift */,
 				BCDA0340270269CB00D44D51 /* ContentView.swift */,
 				BCACBF0727026E08001D5400 /* Firebase.swift */,
 				BCB92D10270EED5A00DC3C0C /* Notification.swift */,
 				BC18716A270BC373002DA886 /* ListView.swift */,
 				BC5AF712271024F60041C4CB /* Security.swift */,
+				BC08844E285BE00C0061C4CB /* SignInWithApple.swift */,
 				BC1C946327046CBA00D3B6BE /* GoogleSignIn.swift */,
 				BCE2774027135F61009C416C /* WaitingView.swift */,
 				BCACBF2727036B5C001D5400 /* FormView.swift */,
@@ -233,8 +240,8 @@
 				BC5AF7162710321B0041C4CB /* ProfileInfoView.swift */,
 				BC187176270D5E3E002DA886 /* MainView.swift */,
 				BCB92D14270F12C600DC3C0C /* GuidanceView.swift */,
-				BCACBF0F270273EB001D5400 /* LaunchView.swift */,
 				BCACBF1727028121001D5400 /* HomeView.swift */,
+				BCACBF0F270273EB001D5400 /* LaunchView.swift */,
 				BCB92D0C270E94FC00DC3C0C /* SettingView.swift */,
 				BCACBF0327026C86001D5400 /* GoogleService-Info.plist */,
 				BCDA0342270269CD00D44D51 /* Assets.xcassets */,
@@ -290,7 +297,7 @@
 			);
 			name = "Health Check";
 			productName = "Health Check";
-			productReference = BCDA033B270269CB00D44D51 /* Health Check.app */;
+			productReference = BCDA033B270269CB00D44D51 /* SmartCheck.app */;
 			productType = "com.apple.product-type.application";
 		};
 		BCDA034B270269CD00D44D51 /* Health CheckTests */ = {
@@ -558,6 +565,7 @@
 				BCACBF1427027891001D5400 /* LoginView.swift in Sources */,
 				BCACBF1827028121001D5400 /* HomeView.swift in Sources */,
 				BCB92D0D270E94FC00DC3C0C /* SettingView.swift in Sources */,
+				BC08844F285BE00C0061C4CB /* SignInWithApple.swift in Sources */,
 				BCACBF0C270273C4001D5400 /* SignupView.swift in Sources */,
 				BCACBF10270273EB001D5400 /* LaunchView.swift in Sources */,
 				BC1C946427046CBA00D3B6BE /* GoogleSignIn.swift in Sources */,
@@ -587,6 +595,7 @@
 				BCACBF2127028958001D5400 /* Userdata.swift in Sources */,
 				BCB92D16270F12C600DC3C0C /* GuidanceView.swift in Sources */,
 				BCACBF0927026E08001D5400 /* Firebase.swift in Sources */,
+				BC088450285BE00C0061C4CB /* SignInWithApple.swift in Sources */,
 				BCACBF1927028121001D5400 /* HomeView.swift in Sources */,
 				BC18716C270BC373002DA886 /* ListView.swift in Sources */,
 				BC9DB99E271969AD006C9179 /* ErrorView.swift in Sources */,
@@ -614,6 +623,7 @@
 				BCACBF2227028958001D5400 /* Userdata.swift in Sources */,
 				BCB92D17270F12C600DC3C0C /* GuidanceView.swift in Sources */,
 				BCACBF0A27026E08001D5400 /* Firebase.swift in Sources */,
+				BC088451285BE00C0061C4CB /* SignInWithApple.swift in Sources */,
 				BCACBF1A27028121001D5400 /* HomeView.swift in Sources */,
 				BC18716D270BC373002DA886 /* ListView.swift in Sources */,
 				BC9DB99F271969AD006C9179 /* ErrorView.swift in Sources */,
@@ -762,9 +772,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Health Check/Health Check.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Health Check/Preview Content\"";
-				DEVELOPMENT_TEAM = K5KVXXRJ34;
+				DEVELOPMENT_TEAM = 5DYRLNLKQF;
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = "Health Check/Info.plist";
@@ -775,9 +786,9 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "pleap.Health-Check";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SmartCheck;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -787,9 +798,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Health Check/Health Check.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Health Check/Preview Content\"";
-				DEVELOPMENT_TEAM = K5KVXXRJ34;
+				DEVELOPMENT_TEAM = 5DYRLNLKQF;
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = "Health Check/Info.plist";
@@ -800,9 +812,9 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "pleap.Health-Check";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = SmartCheck;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

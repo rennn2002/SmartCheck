@@ -25,7 +25,7 @@ struct TempData { //data
     var lastname: String
     var schoolid: Int
     var studentid:Int
-    var bodytemp: Float
+    var bodytemp: Double
     var symptom: Bool
     var posttime: Timestamp
     var mail: String

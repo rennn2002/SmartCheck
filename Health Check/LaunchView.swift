@@ -20,7 +20,10 @@ struct LaunchView: View {
     @State var isNotificationDerived = UserDefaults.standard.value(forKey: "isNotificationDerived") as? Int ?? 0
     
     //var googleauth: GoogleAuth = GoogleAuth()
+    @State private var signInWithAppleObject = SignInWithAppleObject()
     let backGroundColor = Color(red: 96/255, green: 123/255, blue: 184/255)
+    
+    @State private var showSignedIn = false
     
     var body: some View {
         NavigationView {
@@ -29,7 +32,7 @@ struct LaunchView: View {
                 VStack {
                     if self.isLoggedin {
                         HomeView()
-                            
+                        
                     } else if self.isWaitingShow {
                         WaitingView()
                     } else if self.isSignedup {
@@ -61,31 +64,32 @@ struct LaunchView: View {
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .padding(.vertical)
-                                .frame(width:UIScreen.main.bounds.width - 50)
+                                .frame(width:UIScreen.main.bounds.width - 50, height: 50)
                                 .background(Color(red: 119/255, green: 140/255, blue: 236/255))
-                                .cornerRadius(50)
-                                .padding(.top, 25)
-                              
+                                .cornerRadius(16)
+                                .padding(.top, 5)
+                            
                         }
-    
+                        
                         NavigationLink(destination: LoginView(showLogin: self.$showLogin), isActive: self.$showLogin)  {
                             Text("ログイン")
                                 .foregroundColor(.white)
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .padding(.vertical)
-                                .frame(width:UIScreen.main.bounds.width - 50)
+                                .frame(width:UIScreen.main.bounds.width - 50, height: 50)
                                 .background(Color(red: 62/255, green: 74/255, blue: 141/255))
-                                .cornerRadius(50)
-                                .padding(.top, 25)
+                                .cornerRadius(16)
+                                .padding(.top, 15)
                                 .onTapGesture {
                                     self.showLogin.toggle()
                                 }
                         }
                         
+                        // Google Sign-In
                         Button(action:{
-//                            GIDSignIn.sharedInstance()?.presentingViewController = UIApplication.shared.windows.first?.rootViewController
-//                            GIDSignIn.sharedInstance()?.signIn()
+                            //                            GIDSignIn.sharedInstance()?.presentingViewController = UIApplication.shared.windows.first?.rootViewController
+                            //                            GIDSignIn.sharedInstance()?.signIn()
                             guard let clientID = FirebaseApp.app()?.options.clientID else { return }
                             let config = GIDConfiguration(clientID: clientID)
                             
@@ -95,7 +99,7 @@ struct LaunchView: View {
                                     return
                                 }
                                 guard let authentication = user?.authentication, let idToken = authentication.idToken
-                                
+                                        
                                 else {
                                     return
                                 }
@@ -115,13 +119,13 @@ struct LaunchView: View {
                                         let ref = db.collection("users").document(user.uid)
                                         ref.getDocument { (document, error) in
                                             if let document = document, document.exists {
-//                                                print("exist")
+                                                //                                                print("exist")
                                                 UserDefaults.standard.set(false, forKey: "isWaitingShow")
                                                 NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)
                                                 UserDefaults.standard.set(true, forKey: "isLoggedin")
                                                 NotificationCenter.default.post(name: NSNotification.Name("isLoggedin"), object: nil)
                                             } else {
-//                                                print("new")
+                                                //                                                print("new")
                                                 UserDefaults.standard.set(false, forKey: "isWaitingShow")
                                                 NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)
                                                 UserDefaults.standard.set(true, forKey: "isSignedup")
@@ -145,13 +149,24 @@ struct LaunchView: View {
                                     .font(.title2)
                                     .fontWeight(.bold)
                                     .padding(.vertical)
-                            }.frame(width:UIScreen.main.bounds.width - 60)
-                            .clipShape(Capsule())
-                            .background(Color.white)
-                            .cornerRadius(50)
-                            .padding(.top, 25)
+                            }.frame(width:UIScreen.main.bounds.width - 50, height: 50)
+                                .clipShape(Capsule())
+                                .background(Color.white)
+                                .cornerRadius(15)
+                                .padding(.top, 15)
                         }
-                        Spacer(minLength:30)
+                        
+                        // Apple Sign-In
+                        Button(action: {
+                            signInWithAppleObject.signInWithApple()
+                        }, label: {
+                            SignInWithAppleButton()
+                                .frame(width:UIScreen.main.bounds.width - 50, height: 50)
+                                .cornerRadius(16)
+                                .padding(.top, 15)
+                            
+                        })
+                        Spacer(minLength:0)
                     }
                 }
             }.navigationBarHidden(true)
@@ -160,24 +175,24 @@ struct LaunchView: View {
         }.navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            UIApplication.shared.applicationIconBadgeNumber = 0 
-            NotificationCenter.default.addObserver(forName: NSNotification.Name("isLoggedin"), object: nil, queue: .main) { (_) in
-                self.isLoggedin = UserDefaults.standard.value(forKey: "isLoggedin") as? Bool ?? false
+            .onAppear {
+                UIApplication.shared.applicationIconBadgeNumber = 0
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("isLoggedin"), object: nil, queue: .main) { (_) in
+                    self.isLoggedin = UserDefaults.standard.value(forKey: "isLoggedin") as? Bool ?? false
+                }
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("isSignedup"), object: nil, queue: .main) { (_) in
+                    self.isSignedup = UserDefaults.standard.value(forKey: "isSignedup") as? Bool ?? false
+                }
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("isGuidanceShow"), object: nil, queue: .main) { (_) in
+                    self.isGuidanceShow = UserDefaults.standard.value(forKey: "isGuidanceShow") as? Bool ?? false
+                }
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("isWaitingShow"), object: nil, queue: .main) { (_) in
+                    self.isWaitingShow = UserDefaults.standard.value(forKey: "isWaitingShow") as? Bool ?? false
+                }
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("isNotificationDerived"), object: nil, queue: .main) { (_) in
+                    self.isNotificationDerived = UserDefaults.standard.value(forKey: "isNotificationDerived") as? Int ?? 0
+                }
             }
-            NotificationCenter.default.addObserver(forName: NSNotification.Name("isSignedup"), object: nil, queue: .main) { (_) in
-                self.isSignedup = UserDefaults.standard.value(forKey: "isSignedup") as? Bool ?? false
-            }
-            NotificationCenter.default.addObserver(forName: NSNotification.Name("isGuidanceShow"), object: nil, queue: .main) { (_) in
-                self.isGuidanceShow = UserDefaults.standard.value(forKey: "isGuidanceShow") as? Bool ?? false
-            }
-            NotificationCenter.default.addObserver(forName: NSNotification.Name("isWaitingShow"), object: nil, queue: .main) { (_) in
-                self.isWaitingShow = UserDefaults.standard.value(forKey: "isWaitingShow") as? Bool ?? false
-            }
-            NotificationCenter.default.addObserver(forName: NSNotification.Name("isNotificationDerived"), object: nil, queue: .main) { (_) in
-                self.isNotificationDerived = UserDefaults.standard.value(forKey: "isNotificationDerived") as? Int ?? 0
-            }
-        }
     }
 }
 
