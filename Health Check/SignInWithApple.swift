@@ -111,6 +111,10 @@ extension SignInWithAppleObject: ASAuthorizationControllerDelegate {
                     print(error!.localizedDescription)
                     return
                 }
+                UserDefaults.standard.set(true, forKey: "isWaitingShow")
+                NotificationCenter.default.post(name: NSNotification.Name("isWaitingShow"), object: nil)
+                UserDefaults.standard.set(false, forKey: "isGuidanceShow")
+                NotificationCenter.default.post(name: NSNotification.Name("isGuidanceShow"), object: nil)
                 if let user = Auth.auth().currentUser {
                     let db = Firestore.firestore()
                     let ref = db.collection("users").document(user.uid)
